@@ -6,7 +6,7 @@ This file creates your application.
 """
 
 import os
-from app import app, db, login_manager
+from app import app, db
 from flask import (
     render_template,
     request,

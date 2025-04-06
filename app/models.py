@@ -13,7 +13,7 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
     name = db.Column(db.String(80))
-    email = db.Column(db.String(80))
+    email = db.Column(db.String(80), unique=True)
     photo = db.Column(db.String(80))
     date_joined = db.Column(db.DateTime, default=func.now())
 
