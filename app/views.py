@@ -6,7 +6,7 @@ This file creates your application.
 """
 
 import os
-from app import app, db
+from app import app, db, csrf
 from flask import (
     render_template,
     request,
@@ -32,6 +32,9 @@ from sqlalchemy.exc import SQLAlchemyError
 
 ##Helper Function
 
+blacklisted_tokens = set()
+
+
 def create_token(user_id): #jwt token
     payload = {
         'user_id': user_id,
@@ -51,6 +54,11 @@ def jwt_required(f): ##jwt required decorator to attach to the relevant routes
 
         try:
             token = auth_header.split(" ")[1]  # "Bearer <token>"
+            
+             # Check if the token is blacklisted
+            if token in blacklisted_tokens:
+                return jsonify({"message": "Token has been blacklisted. Please log in again."}), 401
+            
             data = decode_token(token)
             user_id = data["user_id"]
         except jwt.ExpiredSignatureError:
@@ -176,6 +184,22 @@ def login():
         "errors": form.errors,
         "message": "User login failed due to validation errors."
     }), 400
+
+@csrf.exempt #need to do when jwt is used for the route
+@app.route("/api/auth/logout", methods=["POST"])
+@jwt_required #once jwtrequired decorator is used, user_id will be passed to the view function
+def logout(user_id):
+    # Get the token from the Authorization header
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
+        return jsonify({"message": "Missing token"}), 401
+
+    token = auth_header.split(" ")[1]  # "Bearer <token>"
+    
+    # Add the token to the blacklist
+    blacklisted_tokens.add(token)
+    
+    return jsonify({"message": f'Logout successful for User {user_id}'}), 200
 
 
 ###
