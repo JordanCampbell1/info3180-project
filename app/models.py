@@ -83,6 +83,25 @@ class Profile(db.Model):
         self.religious = religious
         self.family_oriented = family_oriented
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id_fk,
+            "description": self.description,
+            "parish": self.parish,
+            "biography": self.biography,
+            "sex": self.sex,
+            "race": self.race,
+            "birth_year": self.birth_year,
+            "height": self.height,
+            "fav_cuisine": self.fav_cuisine,
+            "fav_colour": self.fav_colour,
+            "fav_school_subject": self.fav_school_subject,
+            "political": self.political,
+            "religious": self.religious,
+            "family_oriented": self.family_oriented
+        }
+
     def __repr__(self):
         return f"<Profile of User {self.user_id_fk}>"
 

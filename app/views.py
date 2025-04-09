@@ -20,7 +20,7 @@ from flask import (
 )
 from werkzeug.utils import secure_filename
 from app.models import User, Profile, Favourite
-from app.forms import LoginForm, RegisterForm
+from app.forms import LoginForm, ProfileForm, RegisterForm
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask_wtf.csrf import generate_csrf 
@@ -38,7 +38,7 @@ blacklisted_tokens = set()
 def create_token(user_id): #jwt token
     payload = {
         'user_id': user_id,
-        'exp': datetime.now(timezone.utc) + timedelta(hours=2)
+        'exp': datetime.now(timezone.utc) + timedelta(hours=6)
     }
     return jwt.encode(payload, app.config["SECRET_KEY"], algorithm="HS256")
 
@@ -201,6 +201,61 @@ def logout(user_id):
     
     return jsonify({"message": f'Logout successful for User {user_id}'}), 200
 
+@app.route("/api/profiles", methods=["GET"])
+@csrf.exempt
+@jwt_required
+def get_all_profiles(user_id):
+    
+    profiles = Profile.query.all()  
+    return jsonify([profile.to_dict() for profile in profiles]), 200
+
+@app.route("/api/profiles", methods=["POST"])
+def create_profile():
+    
+    form = ProfileForm()
+    
+    if form.validate_on_submit:
+        
+        user_id = form.user_id.data
+        
+        # Check if user already has 3 profiles
+        profile_count = Profile.query.filter_by(user_id_fk=user_id).count()
+        if profile_count >= 3:
+            return jsonify({
+                "message": "You can only create up to 3 profiles."
+            }), 400
+        
+        description = form.description.data
+        parish = form.parish.data
+        biography = form.biography.data
+        sex = form.sex.data
+        race = form.race.data
+        birth_year = form.birth_year.data
+        height = form.height.data
+        fav_cuisine = form.fav_cuisine.data
+        fav_colour = form.fav_colour.data
+        fav_school_subject = form.fav_school_subject.data
+        political = form.political.data
+        religious = form.religious.data
+        family_oriented = form.family_oriented.data
+        
+        profile = Profile(user_id,description,parish,biography,sex,race,birth_year,height,fav_cuisine,fav_colour,fav_school_subject,political,religious,family_oriented)
+        
+        db.session.add(profile)
+        db.session.commit()
+            
+        return jsonify({
+                "message": "Profile created successfully",
+                "profile": profile.to_dict()
+        }), 201
+        
+    # Handle form validation failure
+    return jsonify({
+        "errors": form.errors,
+        "message": "User login failed due to validation errors."
+    }), 400        
+    
+    
 
 ###
 # The functions below should be applicable to all Flask apps.
