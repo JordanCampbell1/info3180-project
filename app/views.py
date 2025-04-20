@@ -5,6 +5,14 @@ Werkzeug Documentation:  https://werkzeug.palletsprojects.com/
 This file creates your application.
 """
 
+<<<<<<< HEAD
+from app import app, db
+from flask import render_template, request, jsonify, send_file
+#from flask_jwt_extended import jwt_required, get_jwt_identity
+from app.models import User, Profile, Favourite
+from sqlalchemy import func
+=======
+>>>>>>> origin/develop
 import os
 from app import app, db, csrf
 from flask import (
@@ -201,6 +209,10 @@ def logout(user_id):
     
     return jsonify({"message": f'Logout successful for User {user_id}'}), 200
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> origin/develop
 @app.route("/api/profiles", methods=["GET"])
 @csrf.exempt
 @jwt_required
@@ -257,6 +269,211 @@ def create_profile():
     
     
 
+<<<<<<< HEAD
+
+
+#Dominic 
+
+# Get details of a specific profile
+##########################################################################
+#Working in Postman#######################################################
+##########################################################################
+@app.route('/api/profiles/<int:profile_id>', methods=['GET'])
+@csrf.exempt
+@jwt_required
+def get_profile(user_id, profile_id):
+    profile = db.session.get(Profile, profile_id)
+    if profile:
+        return jsonify(profile.to_dict()), 200
+    return jsonify({"error": "Profile not found"}), 404
+
+
+# Add user to favourites
+##########################################################################
+#Working in Postman#######################################################
+##########################################################################
+@app.route('/api/profiles/<int:user_id2>/favourite', methods=['POST'])
+@csrf.exempt
+@jwt_required
+def favourite_user(user_id, user_id2):
+    current_user_id = user_id
+    if current_user_id == user_id2:
+        return jsonify({"error": "You can't favourite yourself."}), 400
+
+    already_fav = Favourite.query.filter_by(user_id_fk=current_user_id, fav_user_id_fk=user_id2).first()
+    if already_fav:
+        return jsonify({"message": "User is already in favourites."}), 200
+
+    fav = Favourite(user_id_fk=current_user_id, fav_user_id_fk=user_id2)
+    db.session.add(fav)
+    db.session.commit()
+    return jsonify({"message": "User added to favourites"}), 201
+
+#extra
+#################################################################
+#Working in Postman#######################################################
+#UPDATE PROFILE
+#################################################################
+@app.route('/api/profiles/<int:profile_id>', methods=['PUT'])
+@csrf.exempt
+@jwt_required
+def update_profile(user_id, profile_id):
+    profile = db.session.get(Profile, profile_id)
+    if not profile:
+        return jsonify({"error": "Profile not found"}), 404
+
+    data = request.get_json()
+    
+    for field in [
+        'description', 'parish', 'biography', 'sex', 'race',
+        'birth_year', 'height', 'fav_cuisine', 'fav_colour',
+        'fav_school_subject', 'political', 'religious', 'family_oriented'
+    ]:
+        if field in data:
+            setattr(profile, field, data[field])
+    
+    db.session.commit()
+    return jsonify({"message": "Profile updated", "profile": profile.to_dict()}), 200
+#################################################################
+
+# Get all profiles that match a specific profile's criteria
+#Part 2 point 7
+
+#################################################################
+#Working in Postman#######################################################
+#################################################################
+@app.route('/api/profiles/matches/<int:profile_id>', methods=['GET'])
+@csrf.exempt
+@jwt_required  
+def match_profiles(user_id, profile_id):
+    current = db.session.get(Profile, profile_id)
+    if not current:
+        return jsonify({"error": "Profile not found"}), 404
+
+    matches = []
+    all_profiles = Profile.query.filter(Profile.id != profile_id).all()
+
+    match_fields = [
+        'fav_cuisine', 'fav_colour', 'fav_school_subject',
+        'political', 'religious', 'family_oriented'
+    ]
+
+    for profile in all_profiles:
+        
+        if abs(profile.birth_year - current.birth_year) > 5:
+            continue
+
+        #Converts to Inches
+        # 1 meter = 39.37 inches
+        height_diff_in_inches = abs(profile.height - current.height) * 39.37
+        if height_diff_in_inches < 3 or height_diff_in_inches > 10:
+            continue
+
+        # Count matching fields
+        match_count = sum([
+            getattr(profile, field) == getattr(current, field)
+            for field in match_fields
+        ])
+
+        if match_count >= 3:
+            matches.append(profile.to_dict())
+
+    return jsonify(matches), 200
+
+
+# Search profiles
+#################################################################
+#Working in Postman#######################################################
+#################################################################
+
+@app.route('/api/search', methods=['GET'])
+@csrf.exempt
+@jwt_required
+def search_profiles(user_id):
+    name = request.args.get('name')
+    birth_year = request.args.get('birth_year')
+    sex = request.args.get('sex')
+    race = request.args.get('race')
+
+    # Include all profiles (even current user's)
+    query = Profile.query
+
+    if name:
+        query = query.filter(Profile.description.ilike(f'%{name}%'))
+    if birth_year:
+        query = query.filter(Profile.birth_year == int(birth_year))
+    if sex:
+        query = query.filter(Profile.sex == sex)
+    if race:
+        query = query.filter(Profile.race == race)
+
+    results = query.all()
+    return jsonify([p.to_dict() for p in results]), 200
+
+#Testcase
+# http://localhost:8080/api/search?birth_year=2002&race=Black&sex=Female
+#return id=3
+
+
+# Get details of a user
+#################################################################
+#Working in Postman#######################################################
+#################################################################
+@app.route('/api/users/<int:user_id2>', methods=['GET'])
+@csrf.exempt
+@jwt_required
+def get_user(user_id, user_id2):
+    user = db.session.get(User, user_id2)
+    if user:
+        return jsonify(user.to_dict()), 200
+    return jsonify({"error": "User not found"}), 404
+
+
+# Get users that a user has favourited
+
+##########################################################################
+#Working in Postman#######################################################
+##########################################################################
+@app.route('/api/users/<int:user_id2>/favourites', methods=['GET'])
+@csrf.exempt
+@jwt_required
+def user_favourites(user_id,user_id2):
+    favs = Favourite.query.filter_by(user_id_fk=user_id2).all()
+    data = []
+    for fav in favs:
+        user = db.session.get(User, fav.fav_user_id_fk)
+        if user:
+            data.append(user.to_dict())
+    return jsonify(data), 200
+
+
+##########################################################################
+#Working in Postman#######################################################
+##########################################################################
+@app.route('/api/users/favourites/<int:N>', methods=['GET'])
+@csrf.exempt
+@jwt_required
+def top_favourited_users(user_id, N):
+    counts = (
+        db.session.query(Favourite.fav_user_id_fk, func.count(Favourite.fav_user_id_fk).label('count'))
+        .group_by(Favourite.fav_user_id_fk)
+        .order_by(func.count(Favourite.fav_user_id_fk).desc())
+        .limit(N)
+        .all()
+    )
+    result = []
+    for user_id, count in counts:
+        user = db.session.get(User, user_id)
+        if user:
+            udata = user.to_dict()
+            udata['favourite_count'] = count
+            result.append(udata)
+    return jsonify(result), 200
+
+
+
+=======
+>>>>>>> origin/develop
 ###
 # The functions below should be applicable to all Flask apps.
 

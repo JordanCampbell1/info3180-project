@@ -22,6 +22,7 @@ let message = ref("Welcome to Jam-Date — Find your perfect match today!")
   </div>
 </template>
 
+
 <style scoped>
 .home-container {
   background-image: url('@/assets/dating-bg.jpg'); /* make sure this file exists */
