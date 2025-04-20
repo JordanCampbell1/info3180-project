@@ -40,6 +40,7 @@ class User(db.Model):
     def __repr__(self):
         return "<User %r>" % (self.username)
     
+<<<<<<< HEAD
     #Dom
     #For User model
     def to_dict(self):
@@ -49,6 +50,8 @@ class User(db.Model):
             'email': self.email
         }
 
+=======
+>>>>>>> origin/develop
 
 from . import db
 

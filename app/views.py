@@ -5,11 +5,14 @@ Werkzeug Documentation:  https://werkzeug.palletsprojects.com/
 This file creates your application.
 """
 
+<<<<<<< HEAD
 from app import app, db
 from flask import render_template, request, jsonify, send_file
 #from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models import User, Profile, Favourite
 from sqlalchemy import func
+=======
+>>>>>>> origin/develop
 import os
 from app import app, db, csrf
 from flask import (
@@ -206,7 +209,10 @@ def logout(user_id):
     
     return jsonify({"message": f'Logout successful for User {user_id}'}), 200
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/develop
 @app.route("/api/profiles", methods=["GET"])
 @csrf.exempt
 @jwt_required
@@ -263,6 +269,7 @@ def create_profile():
     
     
 
+<<<<<<< HEAD
 
 
 #Dominic 
@@ -465,6 +472,8 @@ def top_favourited_users(user_id, N):
 
 
 
+=======
+>>>>>>> origin/develop
 ###
 # The functions below should be applicable to all Flask apps.
 
