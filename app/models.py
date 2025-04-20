@@ -17,7 +17,6 @@ class User(db.Model):
     photo = db.Column(db.String(80))
     date_joined = db.Column(db.DateTime, default=func.now())
 
-
     def __init__(self, username, password, name=None, email=None, photo=None):
         self.username = username
         self.password = generate_password_hash(password, method="pbkdf2:sha256")
@@ -39,26 +38,22 @@ class User(db.Model):
 
     def __repr__(self):
         return "<User %r>" % (self.username)
-    
-<<<<<<< HEAD
-    #Dom
-    #For User model
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'username': self.username,
-            'email': self.email
-        }
 
-=======
->>>>>>> origin/develop
+    # Dom
+    # For User model
+    def to_dict(self):
+        return {"id": self.id, "username": self.username, "email": self.email}
+
 
 from . import db
+
 
 class Profile(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id_fk = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)  # Foreign key to User model
+    user_id_fk = db.Column(
+        db.Integer, db.ForeignKey("users.id"), nullable=False
+    )  # Foreign key to User model
     description = db.Column(db.String(200), nullable=True)
     parish = db.Column(db.String(20), nullable=True)
     biography = db.Column(db.String(200), nullable=True)
@@ -72,13 +67,25 @@ class Profile(db.Model):
     political = db.Column(db.Boolean, nullable=True)
     religious = db.Column(db.Boolean, nullable=True)
     family_oriented = db.Column(db.Boolean, nullable=True)
-    
+
     user = db.relationship("User", foreign_keys=[user_id_fk])
 
     def __init__(
-        self, user_id_fk, description=None, parish=None, biography=None, sex=None, race=None, 
-        birth_year=None, height=None, fav_cuisine=None, fav_colour=None, fav_school_subject=None, 
-        political=None, religious=None, family_oriented=None
+        self,
+        user_id_fk,
+        description=None,
+        parish=None,
+        biography=None,
+        sex=None,
+        race=None,
+        birth_year=None,
+        height=None,
+        fav_cuisine=None,
+        fav_colour=None,
+        fav_school_subject=None,
+        political=None,
+        religious=None,
+        family_oriented=None,
     ):
         self.user_id_fk = user_id_fk
         self.description = description
@@ -111,11 +118,12 @@ class Profile(db.Model):
             "fav_school_subject": self.fav_school_subject,
             "political": self.political,
             "religious": self.religious,
-            "family_oriented": self.family_oriented
+            "family_oriented": self.family_oriented,
         }
 
     def __repr__(self):
         return f"<Profile of User {self.user_id_fk}>"
+
 
 class Favourite(db.Model):
 
