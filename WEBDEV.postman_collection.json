@@ -1,0 +1,275 @@
+{
+	"info": {
+		"_postman_id": "90eca283-0156-49a8-a48a-edde4fd09af3",
+		"name": "WEBDEV",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "33501503",
+		"_collection_link": "https://info3180-webdev.postman.co/workspace/INFO3180-WEBDEV-Workspace~deda3f5c-e55f-4488-a53b-2863f18398d7/collection/33501503-90eca283-0156-49a8-a48a-edde4fd09af3?action=share&source=collection_link&creator=33501503"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							"pm.environment.set(\"jwt\", response.token);\r",
+							"pm.environment.set(\"userId\", response.user.id);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRF-TOKEN",
+						"value": "{{csrf}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "jordanc1",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/api/auth/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRF-TOKEN",
+						"value": "{{csrf}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "jordanc2",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "jordan campbell",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "test3@email.com",
+							"type": "text"
+						},
+						{
+							"key": "photo",
+							"type": "file",
+							"src": "/C:/Users/jorda/Downloads/download.jpg"
+						}
+					]
+				},
+				"url": "http://localhost:8080/api/register"
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": "http://localhost:8080/api/auth/logout"
+			},
+			"response": []
+		},
+		{
+			"name": "csrf-token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							"pm.environment.set(\"csrf\", response.csrf_token);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/api/csrf-token"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Profiles",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": "http://localhost:8080/api/profiles"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Profile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRF-TOKEN",
+						"value": "{{csrf}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "user_id",
+							"value": "9",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "randoms rtuff of random stuffdsfdfdsfdsf",
+							"type": "text"
+						},
+						{
+							"key": "parish",
+							"value": "kingston",
+							"type": "text"
+						},
+						{
+							"key": "biography",
+							"value": "biography of xman etc.",
+							"type": "text"
+						},
+						{
+							"key": "sex",
+							"value": "Male",
+							"type": "text"
+						},
+						{
+							"key": "race",
+							"value": "Black",
+							"type": "text"
+						},
+						{
+							"key": "birth_year",
+							"value": "2004",
+							"type": "text"
+						},
+						{
+							"key": "height",
+							"value": "1.75",
+							"type": "text"
+						},
+						{
+							"key": "fav_cuisine",
+							"value": "jamaican",
+							"type": "text"
+						},
+						{
+							"key": "fav_colour",
+							"value": "blue",
+							"type": "text"
+						},
+						{
+							"key": "fav_school_subject",
+							"value": "chemistry",
+							"type": "text"
+						},
+						{
+							"key": "political",
+							"value": "true",
+							"type": "text"
+						},
+						{
+							"key": "religious",
+							"value": "false",
+							"type": "text"
+						},
+						{
+							"key": "family_oriented",
+							"value": "true",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/api/profiles"
+			},
+			"response": []
+		},
+		{
+			"name": "test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
