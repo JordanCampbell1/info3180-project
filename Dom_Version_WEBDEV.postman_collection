@@ -1,0 +1,397 @@
+{
+	"info": {
+		"_postman_id": "bf6ca925-382e-49f0-a92a-55c6ca9cfe59",
+		"name": "WEBDEV",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "44248426"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							"pm.environment.set(\"jwt\", response.token);\r",
+							"pm.environment.set(\"userId\", response.user.id);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRF-TOKEN",
+						"value": "{{csrf}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "jordanc1",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/api/auth/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRF-TOKEN",
+						"value": "{{csrf}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "jordanc2",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "jordan campbell",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "test3@email.com",
+							"type": "text"
+						},
+						{
+							"key": "photo",
+							"type": "file",
+							"src": "/C:/Users/jorda/Downloads/download.jpg"
+						}
+					]
+				},
+				"url": "http://localhost:8080/api/register"
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": "http://localhost:8080/api/auth/logout"
+			},
+			"response": []
+		},
+		{
+			"name": "csrf-token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							"pm.environment.set(\"csrf\", response.csrf_token);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/api/csrf-token",
+				"description": "### Retrieve CSRF Token\n\nThis endpoint makes an HTTP GET request to retrieve the CSRF token.\n\n#### Request\n\nThe request does not require any specific parameters.\n\n#### Response\n\nThe response will be a JSON object with the following schema:\n\n``` json\n{\n  \"csrfToken\": \"string\"\n}\n\n ```\n\nThe `csrfToken` property contains the CSRF token required for subsequent requests to the API."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Profiles",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": "http://localhost:8080/api/profiles"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Profile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRF-TOKEN",
+						"value": "{{csrf}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "user_id",
+							"value": "9",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "randoms rtuff of random stuffdsfdfdsfdsf",
+							"type": "text"
+						},
+						{
+							"key": "parish",
+							"value": "kingston",
+							"type": "text"
+						},
+						{
+							"key": "biography",
+							"value": "biography of xman etc.",
+							"type": "text"
+						},
+						{
+							"key": "sex",
+							"value": "Male",
+							"type": "text"
+						},
+						{
+							"key": "race",
+							"value": "Black",
+							"type": "text"
+						},
+						{
+							"key": "birth_year",
+							"value": "2004",
+							"type": "text"
+						},
+						{
+							"key": "height",
+							"value": "1.75",
+							"type": "text"
+						},
+						{
+							"key": "fav_cuisine",
+							"value": "jamaican",
+							"type": "text"
+						},
+						{
+							"key": "fav_colour",
+							"value": "blue",
+							"type": "text"
+						},
+						{
+							"key": "fav_school_subject",
+							"value": "chemistry",
+							"type": "text"
+						},
+						{
+							"key": "political",
+							"value": "true",
+							"type": "text"
+						},
+						{
+							"key": "religious",
+							"value": "false",
+							"type": "text"
+						},
+						{
+							"key": "family_oriented",
+							"value": "true",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/api/profiles"
+			},
+			"response": []
+		},
+		{
+			"name": "test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/"
+			},
+			"response": []
+		},
+		{
+			"name": "Get_lD_Profile",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Add User To Fav",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3NDUxOTA3NDR9.lhfMAtNVfnRpn7hMuf0oPA7Eb_W1W9bQ941M73JCNyI",
+						"type": "text"
+					}
+				],
+				"url": "http://localhost:8080/api/profiles/3/favourite"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Top N Favorites Users",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3NDUxOTA3NDR9.lhfMAtNVfnRpn7hMuf0oPA7Eb_W1W9bQ941M73JCNyI",
+						"type": "text"
+					}
+				],
+				"url": "http://localhost:8080/api/users/favourites/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Profile Matches",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3NDUxOTA3NDR9.lhfMAtNVfnRpn7hMuf0oPA7Eb_W1W9bQ941M73JCNyI",
+						"type": "text"
+					}
+				],
+				"url": "http://localhost:8080/api/profiles/matches/1"
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE Profile",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"height\": 1.85\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/profiles/3"
+			},
+			"response": []
+		},
+		{
+			"name": "Search Profiles",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": "http://localhost:8080/api/search"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Details of a user",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": "http://localhost:8080/api/users/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Users a User has Favoured",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": "http://localhost:8080/api/users/1/favourites"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
