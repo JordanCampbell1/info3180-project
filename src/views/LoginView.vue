@@ -42,6 +42,9 @@ export default {
 <style scoped>
 .login-container {
   background-color: #ffe3ec;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   height: 100vh;
   display: flex;
   justify-content: center;
