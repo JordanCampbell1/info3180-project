@@ -70,13 +70,15 @@ input {
 }
 
 button {
-  background-color: #9c27b0;
+  width: 100%;
+  padding: 10px;
+  background-color: #ff5c8a;
   color: white;
   border: none;
-  padding: 12px;
   border-radius: 8px;
+  font-size: 15px;
   cursor: pointer;
-  width: 100%;
+  transition: background-color 0.3s;
 }
 
 button:hover {
