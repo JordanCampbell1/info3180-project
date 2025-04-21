@@ -42,32 +42,31 @@ export default {
 <style scoped>
 .login-container {
   background-color: #ffe3ec;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
 
 .form-box {
   background-color: white;
-  padding: 40px;
+  padding: 40px 20px;
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;
+  max-width: 320px;
   text-align: center;
 }
 
 input {
   display: block;
   width: 100%;
-  margin: 10px 0;
-  padding: 12px;
+  margin: 12px 0;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
+  font-size: 14px;
 }
 
 button {
@@ -78,5 +77,9 @@ button {
   border-radius: 8px;
   cursor: pointer;
   width: 100%;
+}
+
+button:hover {
+  background-color: #e14b76;
 }
 </style>
