@@ -43,20 +43,18 @@ export default {
 </script>
 
 <style scoped>
-.login-container {
+.register-container {
   background-color: #e0f7fa;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
 
 .form-box {
   background-color: white;
-  padding: 40px;
+  padding: 40px 30px;
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 100%;
@@ -71,15 +69,22 @@ input {
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
+  font-size: 14px;
 }
 
 button {
+  width: 100%;
+  padding: 12px;
   background-color: #ff5c8a;
   color: white;
   border: none;
-  padding: 12px;
   border-radius: 8px;
+  font-size: 15px;
   cursor: pointer;
-  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #e14b76;
 }
 </style>
