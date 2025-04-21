@@ -49,10 +49,13 @@ export default {
 }
 
 .form-box {
-  background: white;
-  padding: 30px;
+  background-color: white;
+  padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
 }
 
 input {
