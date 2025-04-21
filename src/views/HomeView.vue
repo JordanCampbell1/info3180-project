@@ -25,7 +25,7 @@ let message = ref("Welcome to Jam-Date — Find your perfect match today!")
 
 <style scoped>
 .home-container {
-  background-image: url('@/assets/dating-bg.jpg'); /* make sure this file exists */
+  background-image: url('Black_love.jpg'); /* make sure this file exists */
   background-size: cover;
   background-position: center;
   height: 100vh;
