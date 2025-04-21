@@ -25,10 +25,12 @@ let message = ref("Welcome to Jam-Date — Find your perfect match today!")
 
 <style scoped>
 .home-container {
-  background-image: url('Black_love.jpg'); /* make sure this file exists */
+  background-image: url('@/assets/Black_love.jpg');
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -36,19 +38,25 @@ let message = ref("Welcome to Jam-Date — Find your perfect match today!")
 
 .overlay {
   background-color: rgba(0, 0, 0, 0.6);
-  padding: 40px;
+  padding: 50px;
   border-radius: 16px;
   text-align: center;
   color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 90%;
+  max-width: 500px;
 }
 
 button {
-  padding: 10px 20px;
+  padding: 12px;
   font-size: 16px;
-  margin: 10px;
-  border-radius: 10px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
+  width: 100%;
+  transition: all 0.2s ease-in-out;
 }
 
 .btn-primary {
@@ -65,5 +73,8 @@ button {
   background-color: #2196f3;
   color: white;
 }
-/* Add any component specific styles here */
+
+button:hover {
+  transform: scale(1.03);
+}
 </style>
