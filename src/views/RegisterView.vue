@@ -19,22 +19,36 @@ export default {
     return {
       username: '',
       password: '',
-      name: '',
-      email: ''
+      csrf_token: ''
     };
   },
+  async created() {
+    try {
+      const response = await axios.get('/api/csrf-token');
+      this.csrf_token = response.data.csrf_token;
+    } catch (error) {
+      console.error('Failed to get CSRF token:', error);
+    }
+  },
   methods: {
-    async register() {
+    async login() {
       try {
-        await axios.post('/api/register', {
+        const response = await axios.post('/api/auth/login', {
           username: this.username,
           password: this.password,
-          name: this.name,
-          email: this.email
+          csrf_token: this.csrf_token
         });
-        this.$router.push('/login');
+
+        const token = response.data.token;
+        // Save JWT Token
+        localStorage.setItem('token', token);
+
+        // Set default Authorization header for Axios
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        this.$router.push('/');
       } catch (error) {
-        alert('Registration failed');
+        alert('Login failed');
         console.error(error);
       }
     }
