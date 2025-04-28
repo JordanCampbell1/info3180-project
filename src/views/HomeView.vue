@@ -57,9 +57,10 @@ function toggleSidebar() {
 }
 
 .menu-button {
-  position: fixed;
+  position: absolute;
   top: 20px;
   left: 20px;
+  width: 200px;
   background-color: #2196f3;
   color: white;
   border: none;
@@ -79,7 +80,8 @@ function toggleSidebar() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-top: 50px;
   transition: all 0.3s ease;
   z-index: 500;
 }
