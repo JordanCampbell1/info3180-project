@@ -48,6 +48,14 @@ let message = ref("Welcome to Jam-Date — Find your perfect match today!")
   max-width: 500px;
 }
 
+h1 {
+  font-family: 'Georgia', serif; 
+  font-size: 32px; 
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+
 button {
   padding: 12px;
   font-size: 16px;
