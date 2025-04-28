@@ -59,7 +59,7 @@ function toggleSidebar() {
 .menu-button {
   position: absolute;
   top: 0;
-  left: 20px;
+  left: 0;
   width: 200px;
   background-color: #2196f3;
   color: white;
