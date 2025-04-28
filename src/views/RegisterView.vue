@@ -1,13 +1,15 @@
 <template>
-  <div class="register">
-    <h2>Register</h2>
-    <form @submit.prevent="register">
-      <input v-model="username" placeholder="Username" required />
-      <input v-model="password" type="password" placeholder="Password" required />
-      <input v-model="name" placeholder="Name" required />
-      <input v-model="email" placeholder="Email" required />
-      <button type="submit">Register</button>
-    </form>
+  <div class="register-container">
+    <div class="form-box">
+      <h2>Register</h2>
+      <form @submit.prevent="register">
+        <input v-model="username" placeholder="Username" required />
+        <input v-model="password" type="password" placeholder="Password" required />
+        <input v-model="name" placeholder="Name" required />
+        <input v-model="email" placeholder="Email" required />
+        <button type="submit">Register</button>
+      </form>
+    </div>
   </div>
 </template>
 
