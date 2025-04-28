@@ -58,7 +58,7 @@ function toggleSidebar() {
 
 .menu-button {
   position: absolute;
-  top: 20px;
+  top: 0;
   left: 20px;
   width: 200px;
   background-color: #2196f3;
@@ -91,18 +91,21 @@ function toggleSidebar() {
 }
 
 .btn-report {
+  text-decoration: underline;
   top: 0;
   color: white;
   width: 150px;
 }
 
 .btn-register {
+  text-decoration: underline;
   top: 0;
   color: white;
   width: 150px;
 }
 
 .btn-login {
+  text-decoration: underline;
   top: 0;
   color: white;
   width: 150px;
