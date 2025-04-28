@@ -60,7 +60,7 @@ export default {
 
 <style scoped>
 .register-container {
-  background-color: #ff5c8a;
+  background-image: url('@/assets/register-pic.png');
   height: 100vh;
   display: flex;
   justify-content: center;
