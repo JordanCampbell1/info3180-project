@@ -58,7 +58,7 @@ export default {
 
 <style scoped>
 .login-container {
-  background-color: #ffe3ec;
+  background-color: #e2a1ed;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -99,6 +99,6 @@ button {
 }
 
 button:hover {
-  background-color: #e14b76;
+  background-color: #8e14a3;
 }
 </style>
