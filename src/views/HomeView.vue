@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 
-let message = ref("Welcome to Jam-Date💕  Find your perfect match today!")
+let message = ref("Welcome to Jam-Date💕  Find your perfect match today!" 💕)
 let sidebarOpen = ref(false);
 
 function toggleSidebar() {
@@ -22,10 +22,10 @@ function toggleSidebar() {
         <button class="btn btn-report">View Reports</button>
       </router-link>
       <router-link to="/register">
-        <button class="btn btn-primary m-2">Register</button>
+        <button class="btn btn-register">Register</button>
       </router-link>
       <router-link to="/login">
-        <button class="btn btn-secondary m-2">Login</button>
+        <button class="btn btn-login">Login</button>
       </router-link>
     </div>
 
@@ -53,6 +53,7 @@ function toggleSidebar() {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .menu-button {
@@ -88,7 +89,19 @@ function toggleSidebar() {
 }
 
 .btn-report {
-  background-color: #2196f3;
+  background-color: #e6f4f5;
+  color: white;
+  width: 150px;
+}
+
+.btn-register {
+  background-color: #e6f4f5;
+  color: white;
+  width: 150px;
+}
+
+.btn-login {
+  background-color: #e6f4f5;
   color: white;
   width: 150px;
 }
@@ -130,11 +143,6 @@ button {
 
 .btn-secondary {
   background-color: #9c27b0;
-  color: white;
-}
-
-.btn-report {
-  background-color: #2196f3;
   color: white;
 }
 
