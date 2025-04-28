@@ -58,7 +58,7 @@ export default {
 
 <style scoped>
 .login-container {
-  background-color: #9c27b0;
+  background-image: url('@/assets/login-picture.jpg');
   height: 100vh;
   display: flex;
   justify-content: center;
