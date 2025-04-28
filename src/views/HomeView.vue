@@ -89,19 +89,16 @@ function toggleSidebar() {
 }
 
 .btn-report {
-  background-color: #e6f4f5;
   color: white;
   width: 150px;
 }
 
 .btn-register {
-  background-color: #e6f4f5;
   color: white;
   width: 150px;
 }
 
 .btn-login {
-  background-color: #e6f4f5;
   color: white;
   width: 150px;
 }
