@@ -60,7 +60,7 @@ export default {
 
 <style scoped>
 .register-container {
-  background-color: #e0f7fa;
+  background-color: #edc5e2;
   height: 100vh;
   display: flex;
   justify-content: center;
