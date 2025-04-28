@@ -61,6 +61,7 @@ function toggleSidebar() {
   top: 0;
   left: 0;
   width: 200px;
+  background-color: rgba(0, 0, 0, 0.6);
   color: white;
   border: none;
   padding: 12px 16px;
