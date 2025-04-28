@@ -1,12 +1,18 @@
 <script setup>
 import { ref } from "vue";
 
-let message = ref("Welcome to Jam-Date — Find your perfect match today!")
+let message = ref("Welcome to Jam-Date  Find your perfect match today!")
 
 </script>
 
 <template>
   <div class="home-container">
+    <div class="sidebar">
+      <router-link to="/profiles/favourites">
+        <button class="btn btn-report">View Reports</button>
+      </router-link>
+    </div>
+
     <div class="overlay">
       <h1>{{ message }}</h1>
       <router-link to="/register">
@@ -15,12 +21,10 @@ let message = ref("Welcome to Jam-Date — Find your perfect match today!")
       <router-link to="/login">
         <button class="btn btn-secondary m-2">Login</button>
       </router-link>
-      <router-link to="/profiles/favourites">
-        <button class="btn btn-report m-2">View Reports</button>
-      </router-link>
     </div>
   </div>
 </template>
+
 
 <style scoped>
 .home-container {
@@ -33,6 +37,16 @@ let message = ref("Welcome to Jam-Date — Find your perfect match today!")
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+}
+
+.sidebar {
+  position: absolute;
+  top: 50%;
+  left: 20px; /* Push it a little from the left */
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
 }
 
 .overlay {
@@ -79,6 +93,7 @@ button {
 .btn-report {
   background-color: #2196f3;
   color: white;
+  margin-bottom: 15px;
 }
 
 button:hover {
