@@ -1,11 +1,13 @@
 <template>
-  <div class="login">
-    <h2>Login</h2>
-    <form @submit.prevent="login">
-      <input v-model="username" placeholder="Username" required />
-      <input v-model="password" type="password" placeholder="Password" required />
-      <button type="submit">Login</button>
-    </form>
+  <div class="login-container">
+    <div class="form-box">
+      <h2>Login</h2>
+      <form @submit.prevent="login">
+        <input v-model="username" placeholder="Username" required />
+        <input v-model="password" type="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -16,19 +18,34 @@ export default {
   data() {
     return {
       username: '',
-      password: ''
+      password: '',
+      csrf_token: ''
     };
+  },
+  async created() {
+    try {
+      const response = await axios.get('/api/csrf-token');
+      this.csrf_token = response.data.csrf_token;
+    } catch (error) {
+      console.error('Failed to get CSRF token:', error);
+    }
   },
   methods: {
     async login() {
       try {
         const response = await axios.post('/api/auth/login', {
           username: this.username,
-          password: this.password
+          password: this.password,
+          csrf_token: this.csrf_token
         });
+
         const token = response.data.token;
+        // Save JWT Token
         localStorage.setItem('token', token);
+
+        // Set default Authorization header for Axios
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
         this.$router.push('/');
       } catch (error) {
         alert('Login failed');
