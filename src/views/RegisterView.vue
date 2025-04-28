@@ -69,7 +69,7 @@ export default {
 }
 
 .form-box {
-  background-color: white;
+  background-color: rgba(0, 0, 0, 0.6);
   padding: 40px 30px;
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
