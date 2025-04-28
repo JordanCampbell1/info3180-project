@@ -89,7 +89,7 @@ input {
 button {
   width: 100%;
   padding: 10px;
-  background-color: #ff5c8a;
+  background-color: #9c27b0;
   color: white;
   border: none;
   border-radius: 8px;
