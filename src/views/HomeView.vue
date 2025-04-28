@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 
-let message = ref("Welcome to Jam-Date💕  Find your perfect match today!" 💕)
+let message = ref("Welcome to Jam-Date💕  Find your perfect match today! 💕")
 let sidebarOpen = ref(false);
 
 function toggleSidebar() {
