@@ -42,6 +42,7 @@ function toggleSidebar() {
   </div>
 </template>
 
+
 <style scoped>
 .home-container {
   background-image: url('@/assets/Black_love.jpg');

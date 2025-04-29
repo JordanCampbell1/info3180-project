@@ -34,3 +34,6 @@ venv
 # Environment Variables
 .env
 .flaskenv
+
+#ide env
+package-lock.json
