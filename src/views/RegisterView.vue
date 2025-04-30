@@ -1,13 +1,15 @@
 <template>
-  <div class="register">
-    <h2>Register</h2>
-    <form @submit.prevent="register">
-      <input v-model="username" placeholder="Username" required />
-      <input v-model="password" type="password" placeholder="Password" required />
-      <input v-model="name" placeholder="Name" required />
-      <input v-model="email" placeholder="Email" required />
-      <button type="submit">Register</button>
-    </form>
+  <div class="register-container">
+    <div class="form-box">
+      <h2>Register</h2>
+      <form @submit.prevent="register">
+        <input v-model="username" placeholder="Username" required />
+        <input v-model="password" type="password" placeholder="Password" required />
+        <input v-model="name" placeholder="Name" required />
+        <input v-model="email" placeholder="Email" required />
+        <button type="submit">Register</button>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -19,22 +21,36 @@ export default {
     return {
       username: '',
       password: '',
-      name: '',
-      email: ''
+      csrf_token: ''
     };
   },
+  async created() {
+    try {
+      const response = await axios.get('/api/csrf-token');
+      this.csrf_token = response.data.csrf_token;
+    } catch (error) {
+      console.error('Failed to get CSRF token:', error);
+    }
+  },
   methods: {
-    async register() {
+    async login() {
       try {
-        await axios.post('/api/register', {
+        const response = await axios.post('/api/auth/login', {
           username: this.username,
           password: this.password,
-          name: this.name,
-          email: this.email
+          csrf_token: this.csrf_token
         });
-        this.$router.push('/login');
+
+        const token = response.data.token;
+        // Save JWT Token
+        localStorage.setItem('token', token);
+
+        // Set default Authorization header for Axios
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        this.$router.push('/');
       } catch (error) {
-        alert('Registration failed');
+        alert('Login failed');
         console.error(error);
       }
     }
@@ -43,17 +59,18 @@ export default {
 </script>
 
 <style scoped>
-.login-container {
-  background-color: #e0f7fa;
+.register-container {
+  background-image: url('@/assets/register-pic.png');
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
 
 .form-box {
   background-color: white;
-  padding: 40px;
+  padding: 40px 30px;
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 100%;
@@ -68,15 +85,22 @@ input {
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
+  font-size: 14px;
 }
 
 button {
+  width: 100%;
+  padding: 12px;
   background-color: #ff5c8a;
   color: white;
   border: none;
-  padding: 12px;
   border-radius: 8px;
+  font-size: 15px;
   cursor: pointer;
-  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #e14b76;
 }
 </style>

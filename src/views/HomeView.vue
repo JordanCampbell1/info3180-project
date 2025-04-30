@@ -1,12 +1,35 @@
 <script setup>
 import { ref } from "vue";
 
-let message = ref("Welcome to Jam-Date — Find your perfect match today!")
+let message = ref("Welcome to Jam-Date💕  Find your perfect match today! 💕")
+let sidebarOpen = ref(false);
 
+function toggleSidebar() {
+  sidebarOpen.value = !sidebarOpen.value;
+}
 </script>
 
 <template>
   <div class="home-container">
+    <!-- Sidebar Menu Button -->
+    <button class="menu-button" @click="toggleSidebar">
+      ☰ Menu
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" :class="{ open: sidebarOpen }">
+      <router-link to="/profiles/favourites">
+        <button class="btn btn-report">View Reports</button>
+      </router-link>
+      <router-link to="/register">
+        <button class="btn btn-register">Register</button>
+      </router-link>
+      <router-link to="/login">
+        <button class="btn btn-login">Login</button>
+      </router-link>
+    </div>
+
+    <!-- Main Content -->
     <div class="overlay">
       <h1>{{ message }}</h1>
       <router-link to="/register">
@@ -14,9 +37,6 @@ let message = ref("Welcome to Jam-Date — Find your perfect match today!")
       </router-link>
       <router-link to="/login">
         <button class="btn btn-secondary m-2">Login</button>
-      </router-link>
-      <router-link to="/profiles/favourites">
-        <button class="btn btn-report m-2">View Reports</button>
       </router-link>
     </div>
   </div>
@@ -34,6 +54,62 @@ let message = ref("Welcome to Jam-Date — Find your perfect match today!")
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+}
+
+.menu-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.sidebar {
+  position: absolute;
+  top: 0;
+  left: -200px; 
+  width: 200px;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 50px;
+  transition: all 0.3s ease;
+  z-index: 500;
+}
+
+.sidebar.open {
+  left: 0; 
+}
+
+.btn-report {
+  text-decoration: underline;
+  top: 0;
+  color: white;
+  width: 150px;
+}
+
+.btn-register {
+  text-decoration: underline;
+  top: 0;
+  color: white;
+  width: 150px;
+}
+
+.btn-login {
+  text-decoration: underline;
+  top: 0;
+  color: white;
+  width: 150px;
 }
 
 .overlay {
@@ -47,6 +123,13 @@ let message = ref("Welcome to Jam-Date — Find your perfect match today!")
   gap: 15px;
   width: 90%;
   max-width: 500px;
+}
+
+h1 {
+  font-family: 'Georgia', serif; 
+  font-size: 32px; 
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 
 button {
@@ -66,11 +149,6 @@ button {
 
 .btn-secondary {
   background-color: #9c27b0;
-  color: white;
-}
-
-.btn-report {
-  background-color: #2196f3;
   color: white;
 }
 
