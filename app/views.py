@@ -535,11 +535,16 @@ def search_profiles(user_id):
     sex = request.args.get("sex")
     race = request.args.get("race")
 
-    # Include all profiles (even current user's)
-    query = Profile.query
+    # Start query with Profile + User join
+    query = (
+        db.session.query(Profile, User)
+        .join(User, Profile.user_id_fk == User.id)
+        .filter(User.id != user_id)  # Exclude current user's profiles
+    )
 
+    # Apply filters conditionally
     if name:
-        query = query.filter(Profile.description.ilike(f"%{name}%"))
+        query = query.filter(User.username.ilike(f"%{name}%"))
     if birth_year:
         query = query.filter(Profile.birth_year == int(birth_year))
     if sex:
@@ -547,8 +552,36 @@ def search_profiles(user_id):
     if race:
         query = query.filter(Profile.race == race)
 
-    results = query.all()
-    return jsonify([p.to_dict() for p in results]), 200
+    # Execute and format response
+    results = query.order_by(Profile.created_at.desc()).all()
+
+    profiles_with_user_info = []
+    for profile, user in results:
+        profiles_with_user_info.append(
+            {
+                "id": profile.id,
+                "user_id": user.id,
+                "description": profile.description,
+                "parish": profile.parish,
+                "biography": profile.biography,
+                "sex": profile.sex,
+                "race": profile.race,
+                "birth_year": profile.birth_year,
+                "height": profile.height,
+                "fav_cuisine": profile.fav_cuisine,
+                "fav_colour": profile.fav_colour,
+                "fav_school_sibject": profile.fav_school_subject,
+                "political": profile.political,
+                "religious": profile.religious,
+                "family_oriented": profile.family_oriented,
+                "username": user.username,
+                "photo": user.photo,
+                "date_joined": user.date_joined.isoformat(),
+                "profile_created": profile.created_at.isoformat(),
+            }
+        )
+
+    return jsonify(profiles_with_user_info), 200
 
 
 # Testcase
