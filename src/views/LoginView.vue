@@ -11,7 +11,7 @@
       <!-- Registration Link -->
       <p class="register-link">
         Don't have an account?
-        <router-link to="/register">Register here</router-link>
+        <router-link to="/register">Register Here</router-link>
       </p>
     </div>
   </div>
@@ -128,4 +128,11 @@ button {
 button:hover {
   background-color: #8e14a3;
 }
+
+.register-link {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
 </style>

@@ -1,9 +1,10 @@
 <template>
   <div class="about container">
-    <div></div>
-    <br><br>
+    <div>
 
-    <!-- Search Container -->
+    </div>
+    <br>
+    <br>
     <div id="container">
       <div id="inner-container-top">
         <div id="content">
@@ -16,7 +17,6 @@
           />
         </div>
       </div>
-
       <div id="inner-container-bottom">
         <button class="button" @click="setFilter('username')">Name</button>
         <button class="button" @click="setFilter('birth_year')">Birth</button>
@@ -27,24 +27,18 @@
     </div>
 
     <br>
-
-    <!-- Profile Cards -->
     <div id="profiles">
       <div 
         v-for="profile in displayedProfiles" 
         :key="profile.id" 
-        class="profile-card"
-      >
+        class="profile-card">
         <div class="profile-card-content">
-          <img 
-            :src="profile.photo || 'default-avatar.png'" 
-            alt="profile picture" 
-            class="profile-image"
-          />
+          <img :src="profile.photo || 'default-avatar.png'" alt="profile picture" class="profile-image"/>
           <div class="profile-name">{{ profile.user_id }}</div>
         </div>
       </div>
 
+      <!-- Show message if no profiles -->
       <div v-if="!loading && displayedProfiles.length === 0" class="no-profiles">
         No profiles found.
       </div>
@@ -58,66 +52,67 @@
   </div>
 </template>
 
-<script setup>
-import { ref, computed, onMounted } from 'vue'
-import axios from 'axios'
+<script>
+import axios from 'axios';
 
-// State
-const allProfiles = ref([])
-const profiles = ref([])
-const searchText = ref('')
-const filterKey = ref('')
-const loading = ref(false)
-const error = ref('')
-
-// Computed
-const displayedProfiles = computed(() => {
-  if (searchText.value && filterKey.value) {
-    return allProfiles.value.filter(profile => {
-      const value = String(profile[filterKey.value] || '').toLowerCase()
-      return value.includes(searchText.value.toLowerCase())
-    })
-  }
-  return profiles.value
-})
-
-// Methods
-const fetchProfiles = async () => {
-  loading.value = true
-  error.value = ''
-  try {
-    const token = localStorage.getItem('token')
-    if (!token) {
-      error.value = 'Not authenticated. Please log in.'
-      return
+export default {
+  data() {
+    return {
+      allProfiles: [],
+      profiles: [],
+      searchText: '',
+      filterKey: '',
+      loading: false,
+      error: ''
+    };
+  },
+  computed: {
+    displayedProfiles() {
+      if (this.searchText && this.filterKey) {
+        return this.allProfiles.filter(profile => {
+          const value = String(profile[this.filterKey] || '').toLowerCase();
+          return value.includes(this.searchText.toLowerCase());
+        });
+      }
+      return this.profiles;
     }
-
-    const res = await axios.get('http://localhost:8080/api/profiles', {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-
-    allProfiles.value = res.data
-    profiles.value = [...allProfiles.value].slice(-4).reverse()
-  } catch (err) {
-    console.error('Error fetching profiles:', err)
-    error.value = err.response?.data?.message || 'Failed to load profiles'
-  } finally {
-    loading.value = false
+  },
+  methods: {
+    async fetchProfiles() {
+      this.loading = true;
+      this.error = '';
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          this.error = 'Not authenticated. Please log in.';
+          return;
+        }
+        const res = await axios.get(
+          'http://localhost:8080/api/profiles',
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        this.allProfiles = res.data;
+        this.profiles = [...this.allProfiles].slice(-4).reverse();
+      } catch (error) {
+        console.error('Error fetching profiles:', error);
+        this.error = error.response?.data?.message || 'Failed to load profiles';
+      } finally {
+        this.loading = false;
+      }
+    },
+    setFilter(key) {
+      this.filterKey = key;
+      this.searchText = '';
+    },
+    clearSearch() {
+      this.filterKey = '';
+      this.searchText = '';
+    }
+  },
+  mounted() {
+    this.fetchProfiles();
   }
-}
-
-const setFilter = key => {
-  filterKey.value = key
-  searchText.value = ''
-}
-
-const clearSearch = () => {
-  filterKey.value = ''
-  searchText.value = ''
-}
-
-// Lifecycle
-onMounted(fetchProfiles)
+};
 </script>
 
 <style>

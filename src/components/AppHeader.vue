@@ -39,17 +39,30 @@
 
 
 <script setup>
+import axios from 'axios'
+
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-function logout() {
-  // Remove token or any auth info
-  localStorage.removeItem('token')
-  localStorage.removeItem('user') // optional, if stored
+async function logout() {
+  try {
+    const token = localStorage.getItem('token')
+    if (!token) throw new Error('JWT token missing')
 
-  // Redirect to login
-  router.push('/login')
+    await axios.post('http://localhost:8080/api/auth/logout', {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    // Clean up and redirect
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    router.push('/login')
+  } catch (err) {
+    console.error('Logout failed:', err)
+  }
 }
 </script>
 
