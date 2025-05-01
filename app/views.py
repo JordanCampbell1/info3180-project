@@ -247,8 +247,42 @@ def logout(user_id):
 @jwt_required
 def get_all_profiles(user_id):
 
-    profiles = Profile.query.all()
-    return jsonify([profile.to_dict() for profile in profiles]), 200
+    # 1. Join Profile and User, order by User.date_joined DESC
+    results = (
+        db.session.query(Profile, User)
+        .join(User, Profile.user_id_fk == User.id)
+        .order_by(User.date_joined.desc())
+        .all()
+    )
+
+    # 2. Combine data from both models
+    profiles_with_user_info = []
+    for profile, user in results:
+        profiles_with_user_info.append(
+            {
+                "id": profile.id,
+                "user_id": user.id,
+                "description": profile.description,
+                "parish": profile.parish,
+                "biography": profile.biography,
+                "sex": profile.sex,
+                "race": profile.race,
+                "birth_year": profile.birth_year,
+                "height": profile.height,
+                "fav_cuisine": profile.fav_cuisine,
+                "fav_colour": profile.fav_colour,
+                "fav_school_sibject": profile.fav_school_subject,
+                "political": profile.political,
+                "religious": profile.religious,
+                "family_oriented": profile.family_oriented,
+                # From User
+                "username": user.username,
+                "photo": user.photo,
+                "date_joined": user.date_joined.isoformat(),
+            }
+        )
+
+    return jsonify(profiles_with_user_info), 200
 
 
 @app.route("/api/profiles", methods=["POST"])

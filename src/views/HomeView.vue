@@ -41,7 +41,7 @@
             alt="profile picture" 
             class="profile-image"
           />
-          <div class="profile-name">{{ profile.user_id }}</div>
+          <div class="profile-name">{{ profile.username }}</div>
         </div>
       </div>
 
