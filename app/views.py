@@ -251,7 +251,7 @@ def get_all_profiles(user_id):
     results = (
         db.session.query(Profile, User)
         .join(User, Profile.user_id_fk == User.id)
-        .order_by(User.date_joined.desc())
+        .order_by(Profile.created_at.desc())
         .all()
     )
 
@@ -279,6 +279,7 @@ def get_all_profiles(user_id):
                 "username": user.username,
                 "photo": user.photo,
                 "date_joined": user.date_joined.isoformat(),
+                "profile_created": profile.created_at.isoformat(),
             }
         )
 
