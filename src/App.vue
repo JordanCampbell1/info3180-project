@@ -6,6 +6,7 @@ import AppFooter from "@/components/AppFooter.vue";
 
 <template>
   <AppHeader />
+<!--- separate subheader from header and then check if not login and not register to display subheader---->
 
   <main>
     <RouterView />

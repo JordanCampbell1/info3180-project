@@ -1,158 +1,228 @@
-<script setup>
-import { ref } from "vue";
-
-let message = ref("Welcome to Jam-Date💕  Find your perfect match today! 💕")
-let sidebarOpen = ref(false);
-
-function toggleSidebar() {
-  sidebarOpen.value = !sidebarOpen.value;
-}
-</script>
-
 <template>
-  <div class="home-container">
-    <!-- Sidebar Menu Button -->
-    <button class="menu-button" @click="toggleSidebar">
-      ☰ Menu
-    </button>
+  <div class="about container">
+    <div>
 
-    <!-- Sidebar -->
-    <div class="sidebar" :class="{ open: sidebarOpen }">
-      <router-link to="/profiles/favourites">
-        <button class="btn btn-report">View Reports</button>
-      </router-link>
-      <router-link to="/register">
-        <button class="btn btn-register">Register</button>
-      </router-link>
-      <router-link to="/login">
-        <button class="btn btn-login">Login</button>
-      </router-link>
+    </div>
+    <br>
+    <br>
+    <div id="container">
+      <div id="inner-container-top">
+        <div id="content">
+          <h2>Search</h2>
+          <input 
+            v-model="searchText" 
+            type="text" 
+            placeholder="Enter search text..." 
+            class="search-bar"
+          />
+        </div>
+      </div>
+      <div id="inner-container-bottom">
+        <button class="button" @click="setFilter('username')">Name</button>
+        <button class="button" @click="setFilter('birth_year')">Birth</button>
+        <button class="button" @click="setFilter('sex')">Sex</button>
+        <button class="button" @click="setFilter('race')">Race</button>
+        <button class="button" @click="clearSearch">Clear</button>
+      </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="overlay">
-      <h1>{{ message }}</h1>
-      <router-link to="/register">
-        <button class="btn btn-primary m-2">Register</button>
-      </router-link>
-      <router-link to="/login">
-        <button class="btn btn-secondary m-2">Login</button>
-      </router-link>
+    <br>
+    <div id="profiles">
+      <div 
+        v-for="profile in displayedProfiles" 
+        :key="profile.id" 
+        class="profile-card">
+        <div class="profile-card-content">
+          <img :src="profile.photo || 'default-avatar.png'" alt="profile picture" class="profile-image"/>
+          <div class="profile-name">{{ profile.username }}</div>
+        </div>
+      </div>
+
+      <!-- Show message if no profiles -->
+      <div v-if="!loading && displayedProfiles.length === 0" class="no-profiles">
+        No profiles found.
+      </div>
+      <div v-if="loading" class="loading-message">
+        Loading profiles...
+      </div>
+      <div v-if="error" class="error-message">
+        {{ error }}
+      </div>
     </div>
   </div>
 </template>
 
+<script>
+import axios from 'axios';
 
-<style scoped>
-.home-container {
-  background-image: url('@/assets/Black_love.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
+export default {
+  data() {
+    return {
+      allProfiles: [],
+      profiles: [],
+      searchText: '',
+      filterKey: '',
+      loading: false,
+      error: ''
+    };
+  },
+  computed: {
+    displayedProfiles() {
+      if (this.searchText && this.filterKey) {
+        return this.allProfiles.filter(profile => {
+          const value = String(profile[this.filterKey] || '').toLowerCase();
+          return value.includes(this.searchText.toLowerCase());
+        });
+      }
+      return this.profiles;
+    }
+  },
+  methods: {
+    async fetchProfiles() {
+      this.loading = true;
+      this.error = '';
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          this.error = 'Not authenticated. Please log in.';
+          return;
+        }
+        const res = await axios.get(
+          'http://localhost:8080/api/profiles',
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        this.allProfiles = res.data;
+        this.profiles = [...this.allProfiles].slice(-4).reverse();
+      } catch (error) {
+        console.error('Error fetching profiles:', error);
+        this.error = error.response?.data?.message || 'Failed to load profiles';
+      } finally {
+        this.loading = false;
+      }
+    },
+    setFilter(key) {
+      this.filterKey = key;
+      this.searchText = '';
+    },
+    clearSearch() {
+      this.filterKey = '';
+      this.searchText = '';
+    }
+  },
+  mounted() {
+    this.fetchProfiles();
+  }
+};
+</script>
 
-.menu-button {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 200px;
-  background-color: rgba(0, 0, 0, 0.6);
-  color: white;
-  border: none;
-  padding: 12px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  z-index: 1000;
-}
+<style>
+  #container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 30vh;
+    background-color: rgb(204, 192, 182);
+    border-radius: 2ch;
+  }
 
-.sidebar {
-  position: absolute;
-  top: 0;
-  left: -200px; 
-  width: 200px;
-  height: 100%;
-  background-color: rgba(0,0,0,0.8);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 50px;
-  transition: all 0.3s ease;
-  z-index: 500;
-}
+  #inner-container-top {
+    display: flex;
+    width: 77%;
+    height: 25vh;
+    background-color: rgb(180, 163, 146);
+    color: white;
+    padding-left: 16px;
+    padding-top: 16px;
+  }
 
-.sidebar.open {
-  left: 0; 
-}
+  #inner-container-bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10vh + 1ch;
+    background-color: rgb(255, 183, 0);
+    margin-bottom: 1ch;
+    border-bottom-left-radius: 2ch;
+    border-bottom-right-radius: 2ch;
+  }
 
-.btn-report {
-  text-decoration: underline;
-  top: 0;
-  color: white;
-  width: 150px;
-}
+  .search-bar {
+    padding: 8px;
+    width: 250px;
+    border-radius: 6px;
+    border: none;
+    margin-top: 10px;
+    font-size: 16px;
+  }
 
-.btn-register {
-  text-decoration: underline;
-  top: 0;
-  color: white;
-  width: 150px;
-}
+  .button {
+    margin-left: 16px;
+    margin-top: 32px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: rgb(188, 173, 163);
+  }
 
-.btn-login {
-  text-decoration: underline;
-  top: 0;
-  color: white;
-  width: 150px;
-}
+  #profiles {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
 
-.overlay {
-  background-color: rgba(0, 0, 0, 0.6);
-  padding: 50px;
-  border-radius: 16px;
-  text-align: center;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 90%;
-  max-width: 500px;
-}
+  .profile-card {
+    width: 150px;
+    height: 200px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+  }
 
-h1 {
-  font-family: 'Georgia', serif; 
-  font-size: 32px; 
-  font-weight: bold;
-  margin-bottom: 20px;
-}
+  .profile-card-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
 
-button {
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  transition: all 0.2s ease-in-out;
-}
+  .profile-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    background-color: transparent;
+  }
 
-.btn-primary {
-  background-color: #ff5c8a;
-  color: white;
-}
+  .profile-name {
+    position: absolute;
+    bottom: 10px;
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+  }
 
-.btn-secondary {
-  background-color: #9c27b0;
-  color: white;
-}
-
-button:hover {
-  transform: scale(1.03);
-}
+  .no-profiles, .loading-message, .error-message {
+    width: 100%;
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    color: #333;
+  }
 </style>

@@ -14,47 +14,68 @@
 <script>
 import axios from 'axios';
 
+// Ensure cookies (for CSRF) are always sent
+axios.defaults.withCredentials = true;
+
 export default {
   data() {
     return {
       username: '',
       password: '',
-      csrf_token: ''
+      csrfToken: ''
     };
   },
-  async created() {
+
+  async mounted() {
     try {
-      const response = await axios.get('/api/csrf-token');
-      this.csrf_token = response.data.csrf_token;
-    } catch (error) {
-      console.error('Failed to get CSRF token:', error);
+      console.log("mounted hook running...");
+      const { data } = await axios.get('http://localhost:8080/api/csrf-token');
+      console.log("CSRF token fetched:", data.csrf_token);
+      this.csrfToken = data.csrf_token;
+    } catch (e) {
+      console.error('Could not fetch CSRF token:', e);
     }
   },
+
   methods: {
     async login() {
       try {
-        const response = await axios.post('/api/auth/login', {
-          username: this.username,
-          password: this.password,
-          csrf_token: this.csrf_token
+        console.log("Login button clicked");
+
+        // Format request correctly for Flask-WTF
+        const formData = new URLSearchParams();
+        formData.append("username", this.username);
+        formData.append("password", this.password);
+
+        console.log("Attempting login with URL encoded format:", formData.toString());
+
+        const response = await axios.post("http://localhost:8080/api/auth/login", formData, {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",  // Flask-WTF expects this format
+            "X-CSRFToken": this.csrfToken  // Include CSRF token
+          }
         });
 
         const token = response.data.token;
-        // Save JWT Token
-        localStorage.setItem('token', token);
+        console.log("Token received:", token);
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-        // Set default Authorization header for Axios
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-        this.$router.push('/');
-      } catch (error) {
-        alert('Login failed');
-        console.error(error);
+        console.log("Login successful, redirecting...");
+        this.$router.push("/");
+      }
+       catch (error) {
+        console.error("Login error:", error.response?.data || error);
+        alert(error.response?.data?.message || "Login failed");
       }
     }
+
+
   }
 };
 </script>
+
 
 <style scoped>
 .login-container {

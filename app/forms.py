@@ -19,6 +19,7 @@ class RegisterForm(FlaskForm):
     )
     
 class LoginForm(FlaskForm):
+    #csrf_token = StringField("csrf_token")  # Explicitly include CSRF token
     username = StringField("Username", validators=[InputRequired()])
     password = PasswordField("Password", validators=[InputRequired()])
 

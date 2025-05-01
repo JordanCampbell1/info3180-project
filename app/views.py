@@ -332,6 +332,7 @@ def create_profile():
 @csrf.exempt
 @jwt_required
 def get_profile(user_id, profile_id):
+    print("get_profile route was reached")
     profile = db.session.get(Profile, profile_id)
     if profile:
         return jsonify(profile.to_dict()), 200
