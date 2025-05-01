@@ -37,7 +37,7 @@
       >
         <div class="profile-card-content">
           <img 
-            :src="profile.photo || 'default-avatar.png'" 
+            :src="profile.photo ? `http://localhost:8080/uploads/${profile.photo}` : `http://localhost:8080/uploads/defaultAvatar.png`"
             alt="profile picture" 
             class="profile-image"
           />
