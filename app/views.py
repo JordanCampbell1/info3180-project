@@ -368,10 +368,41 @@ def create_profile():
 @jwt_required
 def get_profile(user_id, profile_id):
     print("get_profile route was reached")
-    profile = db.session.get(Profile, profile_id)
-    if profile:
-        return jsonify(profile.to_dict()), 200
-    return jsonify({"error": "Profile not found"}), 404
+    result = (
+        db.session.query(Profile, User)
+        .join(User, Profile.user_id_fk == User.id)
+        .filter(Profile.id == profile_id)
+        .first()
+    )
+
+    if not result:
+        return jsonify({"message": "Profile not found."}), 404
+
+    profile, user = result
+
+    profile_data = {
+        "id": profile.id,
+        "user_id": user.id,
+        "description": profile.description,
+        "parish": profile.parish,
+        "biography": profile.biography,
+        "sex": profile.sex,
+        "race": profile.race,
+        "birth_year": profile.birth_year,
+        "height": profile.height,
+        "fav_cuisine": profile.fav_cuisine,
+        "fav_colour": profile.fav_colour,
+        "fav_school_sibject": profile.fav_school_subject,
+        "political": profile.political,
+        "religious": profile.religious,
+        "family_oriented": profile.family_oriented,
+        "username": user.username,
+        "photo": user.photo,
+        "date_joined": user.date_joined.isoformat(),
+        "profile_created": profile.created_at.isoformat(),
+    }
+
+    return jsonify(profile_data), 200
 
 
 # Add user to favourites
