@@ -39,6 +39,18 @@
 
 
 <script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+function logout() {
+  // Remove token or any auth info
+  localStorage.removeItem('token')
+  localStorage.removeItem('user') // optional, if stored
+
+  // Redirect to login
+  router.push('/login')
+}
 </script>
 
 <style>
