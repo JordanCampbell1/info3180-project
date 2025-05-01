@@ -1,62 +1,66 @@
 <template>
-  <div class="about container">
-    <div></div>
-    <br><br>
+  <div class="container mt-4">
+    <h2 class="mb-4">Latest Profiles</h2>
 
-    <!-- Search Container -->
-    <div id="container">
-      <div id="inner-container-top">
-        <div id="content">
-          <h2>Search</h2>
-          <input 
-            v-model="searchText" 
-            type="text" 
-            placeholder="Enter search text..." 
-            class="search-bar"
+    <!-- Search Box -->
+    <div class="mb-4 p-3 bg-light rounded">
+      <div class="row g-2 align-items-center">
+        <div class="col-md-6">
+          <input
+            v-model="searchText"
+            type="text"
+            placeholder="Search..."
+            class="form-control"
           />
         </div>
-      </div>
-
-      <div id="inner-container-bottom">
-        <button class="button" @click="setFilter('username')">Name</button>
-        <button class="button" @click="setFilter('birth_year')">Birth</button>
-        <button class="button" @click="setFilter('sex')">Sex</button>
-        <button class="button" @click="setFilter('race')">Race</button>
-        <button class="button" @click="clearSearch">Clear</button>
+        <div class="col-md-6 d-flex justify-content-md-end gap-2 flex-wrap">
+          <button class="btn btn-secondary" @click="setFilter('username')">Name</button>
+          <button class="btn btn-secondary" @click="setFilter('birth_year')">Birth Year</button>
+          <button class="btn btn-secondary" @click="setFilter('sex')">Sex</button>
+          <button class="btn btn-secondary" @click="setFilter('race')">Race</button>
+          <button class="btn btn-outline-danger" @click="clearSearch">Clear</button>
+        </div>
       </div>
     </div>
 
-    <br>
-
-    <!-- Profile Cards -->
-    <div id="profiles">
-      <div 
-        v-for="profile in displayedProfiles" 
-        :key="profile.id" 
-        class="profile-card"
-      >
-        <div class="profile-card-content">
-          <img 
-            :src="profile.photo ? `http://localhost:8080/uploads/${profile.photo}` : `http://localhost:8080/uploads/defaultAvatar.png`"
-            alt="profile picture" 
-            class="profile-image"
-          />
-          <div class="profile-name">{{ profile.username }}</div>
+    <!-- Profiles Grid -->
+    <div class="row">
+      <div v-for="profile in displayedProfiles" :key="profile.id" class="col-12 col-sm-6 col-lg-3 mb-4">
+        <div class="card h-100 shadow-sm">
+          <div class="img-container">
+            <img
+              :src="profile.photo ? `http://localhost:8080/uploads/${profile.photo}` : `http://localhost:8080/uploads/defaultAvatar.png`"
+              class="card-img-top profile-img"
+              alt="Profile photo"
+            />
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">{{ profile.username }}</h5>
+            <p class="card-text mb-1"><strong>Sex:</strong> {{ profile.sex }}</p>
+            <p class="card-text mb-1"><strong>Race:</strong> {{ profile.race }}</p>
+            <p class="card-text mb-1"><strong>Parish:</strong> {{ profile.parish }}</p>
+          </div>
+          <div class="card-footer text-muted small text-end">
+            Joined: {{ formatDate(profile.date_joined) }}
+          </div>
         </div>
       </div>
+    </div>
 
-      <div v-if="!loading && displayedProfiles.length === 0" class="no-profiles">
-        No profiles found.
-      </div>
-      <div v-if="loading" class="loading-message">
-        Loading profiles...
-      </div>
-      <div v-if="error" class="error-message">
-        {{ error }}
-      </div>
+    <!-- Messages -->
+    <div v-if="!loading && displayedProfiles.length === 0" class="alert alert-info text-center">
+      No profiles found.
+    </div>
+    <div v-if="loading" class="alert alert-warning text-center">
+      Loading profiles...
+    </div>
+    <div v-if="error" class="alert alert-danger text-center">
+      {{ error }}
     </div>
   </div>
 </template>
+
+
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
@@ -115,6 +119,12 @@ const clearSearch = () => {
   filterKey.value = ''
   searchText.value = ''
 }
+
+function formatDate(dateStr) {
+  const options = { year: 'numeric', month: 'short', day: 'numeric' }
+  return new Date(dateStr).toLocaleDateString(undefined, options)
+}
+
 
 // Lifecycle
 onMounted(fetchProfiles)
@@ -230,4 +240,17 @@ onMounted(fetchProfiles)
     font-size: 1.2rem;
     color: #333;
   }
+
+  .img-container {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Square image container */
+  overflow: hidden;
+}
+
+.profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 </style>
