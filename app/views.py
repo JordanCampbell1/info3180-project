@@ -91,7 +91,7 @@ def jwt_required(f):  ##jwt required decorator to attach to the relevant routes
 
 @app.route("/")
 def index():
-    return jsonify(message="This is the beginning of our API")
+    return app.send_static_file("index.html")
 
 
 @app.route("/api/register", methods=["POST"])
