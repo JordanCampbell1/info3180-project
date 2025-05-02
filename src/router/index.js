@@ -41,7 +41,7 @@ const router = createRouter({
       component: AboutView
     },
     {
-      path: '/profile',
+      path: '/users/:userid',
       name: 'my-profile',
       component: () => import('../views/MyProfileView.vue') // Add this line
     },
@@ -49,7 +49,29 @@ const router = createRouter({
       path: '/profiles/:id',
       name: 'ProfileDetails',
       component: () => import('@/views/ProfileDetails.vue') // or wherever the component is
-    }
+    },
+    {
+      path: '/match-report/:profileId',
+      name: 'Match Report',
+      component: () => import('@/views/MatchReport.vue') // or wherever the component is
+    },
+    {
+      path: '/profiles/new',
+      name: 'CreateProfile',
+      component: () => import('@/views/CreateProfile.vue') // or wherever the component is
+    },
+    {
+      path: '/profiles/favourites',
+      name: 'Favourites',
+      component: () => import('@/views/Favourites.vue') // or wherever the component is
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: () => import('@/views/NotFound.vue')
+    },
+    
+    
     
   ]
 })

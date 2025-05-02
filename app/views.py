@@ -251,6 +251,7 @@ def get_all_profiles(user_id):
     results = (
         db.session.query(Profile, User)
         .join(User, Profile.user_id_fk == User.id)
+        .filter(User.id != user_id)
         .order_by(Profile.created_at.desc())
         .all()
     )
@@ -479,12 +480,21 @@ def update_profile(user_id, profile_id):
 @csrf.exempt
 @jwt_required
 def match_profiles(user_id, profile_id):
-    current = db.session.get(Profile, profile_id)
+    # print("this is user id", user_id)
+    # print("this is profile id", profile_id)
+    current = Profile.query.filter_by(id=profile_id, user_id_fk=user_id).first()
+
+    # print("this is current profile", current)
+
     if not current:
         return jsonify({"error": "Profile not found"}), 404
 
     matches = []
-    all_profiles = Profile.query.filter(Profile.id != profile_id).all()
+    all_profiles = Profile.query.filter(
+        Profile.id != profile_id, Profile.user_id_fk != user_id
+    ).all()
+
+    # print("this is all profiles", all_profiles)
 
     match_fields = [
         "fav_cuisine",
@@ -496,26 +506,34 @@ def match_profiles(user_id, profile_id):
     ]
 
     for profile in all_profiles:
+        if not profile.birth_year or not current.birth_year:
+            continue
 
         if abs(profile.birth_year - current.birth_year) > 5:
             continue
 
-        # Converts to Inches
-        # 1 meter = 39.37 inches
-        height_diff_in_inches = abs(profile.height - current.height) * 39.37
-        if height_diff_in_inches < 3 or height_diff_in_inches > 10:
+        if not profile.height or not current.height:
             continue
 
-        # Count matching fields
-        match_count = sum(
-            [
-                getattr(profile, field) == getattr(current, field)
-                for field in match_fields
-            ]
-        )
+        height_diff_in_inches = abs(profile.height - current.height) * 39.37
 
-        if match_count >= 3:
-            matches.append(profile.to_dict())
+        # print("height diff in inches", 3 <= int(height_diff_in_inches) <= 10)
+
+        if not (3 <= int(height_diff_in_inches) <= 10):
+            continue
+
+        # print("this is profile in the validation logic", profile)
+
+        matched_fields = [
+            field
+            for field in match_fields
+            if getattr(profile, field) == getattr(current, field)
+        ]
+
+        if len(matched_fields) >= 3:
+            profile_dict = profile.to_dict()
+            profile_dict["matched_fields"] = matched_fields
+            matches.append(profile_dict)
 
     return jsonify(matches), 200
 
@@ -618,7 +636,14 @@ def user_favourites(user_id, user_id2):
     for fav in favs:
         user = db.session.get(User, fav.fav_user_id_fk)
         if user:
-            data.append(user.to_dict())
+            data.append(
+                {
+                    "id": user.id,
+                    "username": user.username,
+                    "email": user.email,
+                    "photo": user.photo,  # Include photo field
+                }
+            )
     return jsonify(data), 200
 
 
@@ -639,14 +664,34 @@ def top_favourited_users(user_id, N):
         .limit(N)
         .all()
     )
+
     result = []
     for user_id, count in counts:
         user = db.session.get(User, user_id)
         if user:
-            udata = user.to_dict()
-            udata["favourite_count"] = count
+            udata = {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+                "photo": user.photo,  # Include the photo field
+                "favourite_count": count,
+            }
             result.append(udata)
+
     return jsonify(result), 200
+
+
+@app.route("/api/users/<int:user_id>/profiles", methods=["GET"])
+@csrf.exempt
+@jwt_required
+def get_user_profiles(current_user_id, user_id):
+    profiles = Profile.query.filter_by(user_id_fk=user_id).all()
+
+    if not profiles:
+        return jsonify({"message": "No profiles found for this user."}), 404
+
+    profiles_data = [profile.to_dict() for profile in profiles]
+    return jsonify(profiles_data), 200
 
 
 ###

@@ -20,28 +20,38 @@
           <div class="d-flex ms-auto align-items-center gap-3">
             <RouterLink to="/" class="nav-link">Home</RouterLink>
             <RouterLink to="/about" class="nav-link">About</RouterLink>
+            <RouterLink to="/profiles/new" class="btn btn-outline-warning">
+              + Create Profile
+            </RouterLink>
+            <RouterLink to="/profiles/favourites" class="btn btn-outline-info">💖 Favourites</RouterLink>
             <button class="btn btn-outline-light" @click="logout">
               Logout
             </button>
           </div>
         </div>
-
       </div>
     </nav>
+
     <div class="subheader container-fluid px-4 py-2">
-      <RouterLink to="/profile" class="subheader-link">My Profile</RouterLink>
+      <RouterLink to="/users/{{user.id}}" class="subheader-link">My Profile</RouterLink>
       <span class="divider">/</span>
       <span class="current-page">{{ currentPage }}</span>
     </div>
-
   </header>
 </template>
+
 
 
 <script setup>
 import axios from 'axios'
 
 import { useRouter } from 'vue-router'
+
+
+const userStr = localStorage.getItem('user')
+const user = JSON.parse(userStr)
+
+console.log('User ID:', user.id)
 
 const router = useRouter()
 
@@ -128,5 +138,29 @@ async function logout() {
 .divider {
   color: #ccc;
 }
+
+.btn-outline-warning {
+  border-color: #ffc107;
+  color: #ffc107;
+  font-weight: 500;
+}
+
+.btn-outline-warning:hover {
+  background-color: #ffc107;
+  color: #16110c;
+}
+
+.btn-outline-info {
+  color: #0dcaf0;
+  border-color: #0dcaf0;
+  font-weight: 500;
+}
+
+.btn-outline-info:hover {
+  background-color: #0dcaf0;
+  color: #16110c;
+}
+
+
 
 </style>
