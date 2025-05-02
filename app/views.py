@@ -544,13 +544,13 @@ def search_profiles(user_id):
 
     # Apply filters conditionally
     if name:
-        query = query.filter(User.username.ilike(f"%{name}%"))
+        query = query.filter(func.lower(User.username).like(f"%{name.lower()}%"))
     if birth_year:
         query = query.filter(Profile.birth_year == int(birth_year))
     if sex:
-        query = query.filter(Profile.sex == sex)
+        query = query.filter(func.lower(Profile.sex) == sex.lower())
     if race:
-        query = query.filter(Profile.race == race)
+        query = query.filter(func.lower(Profile.race) == race.lower())
 
     # Execute and format response
     results = query.order_by(Profile.created_at.desc()).all()

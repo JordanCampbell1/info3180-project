@@ -14,7 +14,7 @@
           />
         </div>
         <div class="col-md-6 d-flex justify-content-md-end gap-2 flex-wrap">
-          <button class="btn btn-secondary" @click="setFilter('username')">Name</button>
+          <button class="btn btn-secondary" @click="setFilter('name')">Name</button>
           <button class="btn btn-secondary" @click="setFilter('birth_year')">Birth Year</button>
           <button class="btn btn-secondary" @click="setFilter('sex')">Sex</button>
           <button class="btn btn-secondary" @click="setFilter('race')">Race</button>
@@ -82,22 +82,19 @@ const searchText = ref('')
 const filterKey = ref('')
 const loading = ref(false)
 const error = ref('')
+const searching = ref(false)
+
 
 // Computed
-const displayedProfiles = computed(() => {
-  if (searchText.value && filterKey.value) {
-    return allProfiles.value.filter(profile => {
-      const value = String(profile[filterKey.value] || '').toLowerCase()
-      return value.includes(searchText.value.toLowerCase())
-    })
-  }
-  return profiles.value
-})
+const displayedProfiles = computed(() => profiles.value)
+
 
 // Methods
 const fetchProfiles = async () => {
   loading.value = true
   error.value = ''
+  searching.value = false
+
   try {
     const token = localStorage.getItem('token')
     if (!token) {
@@ -109,8 +106,7 @@ const fetchProfiles = async () => {
       headers: { Authorization: `Bearer ${token}` }
     })
 
-    allProfiles.value = res.data
-    profiles.value = [...allProfiles.value].slice(-4).reverse()
+    profiles.value = res.data.slice(0, 4) // Only 4 on default load
   } catch (err) {
     console.error('Error fetching profiles:', err)
     error.value = err.response?.data?.message || 'Failed to load profiles'
@@ -119,20 +115,60 @@ const fetchProfiles = async () => {
   }
 }
 
-const setFilter = key => {
+
+const setFilter = (key) => {
   filterKey.value = key
-  searchText.value = ''
+  if (searchText.value) {
+    searchProfiles()
+  }
 }
+
+
 
 const clearSearch = () => {
   filterKey.value = ''
   searchText.value = ''
+  fetchProfiles() // goes back to 4 latest
 }
+
+
 
 function formatDate(dateStr) {
   const options = { year: 'numeric', month: 'short', day: 'numeric' }
   return new Date(dateStr).toLocaleDateString(undefined, options)
 }
+
+const searchProfiles = async () => {
+  loading.value = true
+  error.value = ''
+  searching.value = true
+
+  try {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      error.value = 'Not authenticated. Please log in.'
+      return
+    }
+
+    const params = new URLSearchParams()
+    if (filterKey.value && searchText.value) {
+      params.append(filterKey.value, searchText.value)
+    }
+
+    const res = await axios.get(`http://localhost:8080/api/search?${params.toString()}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+
+    profiles.value = res.data // Full search results
+  } catch (err) {
+    console.error('Search failed:', err)
+    error.value = err.response?.data?.message || 'Search failed'
+  } finally {
+    loading.value = false
+  }
+}
+
+
 
 
 // Lifecycle
