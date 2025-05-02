@@ -636,7 +636,14 @@ def user_favourites(user_id, user_id2):
     for fav in favs:
         user = db.session.get(User, fav.fav_user_id_fk)
         if user:
-            data.append(user.to_dict())
+            data.append(
+                {
+                    "id": user.id,
+                    "username": user.username,
+                    "email": user.email,
+                    "photo": user.photo,  # Include photo field
+                }
+            )
     return jsonify(data), 200
 
 
@@ -657,13 +664,20 @@ def top_favourited_users(user_id, N):
         .limit(N)
         .all()
     )
+
     result = []
     for user_id, count in counts:
         user = db.session.get(User, user_id)
         if user:
-            udata = user.to_dict()
-            udata["favourite_count"] = count
+            udata = {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+                "photo": user.photo,  # Include the photo field
+                "favourite_count": count,
+            }
             result.append(udata)
+
     return jsonify(result), 200
 
 
