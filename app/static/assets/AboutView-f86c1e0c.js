@@ -1,0 +1,1 @@
+import{_ as o,o as t,c as s,a as e}from"./index-a9c919b9.js";const c={},n={class:"about container"},a=e("h2",null,"About",-1),_=e("p",null,"This is an about page.",-1),r=[a,_];function i(d,l){return t(),s("div",n,r)}const h=o(c,[["render",i]]);export{h as default};
