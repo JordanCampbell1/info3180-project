@@ -49,6 +49,21 @@ const router = createRouter({
       path: '/profiles/:id',
       name: 'ProfileDetails',
       component: () => import('@/views/ProfileDetails.vue') // or wherever the component is
+    },
+    {
+      path: '/match-report/:profileId',
+      name: 'Match Report',
+      component: () => import('@/views/MatchReport.vue') // or wherever the component is
+    },
+    {
+      path: '/profiles/new',
+      name: 'CreateProfile',
+      component: () => import('@/views/CreateProfile.vue') // or wherever the component is
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: () => import('@/views/NotFound.vue')
     }
     
   ]

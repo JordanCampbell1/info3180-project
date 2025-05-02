@@ -20,22 +20,25 @@
           <div class="d-flex ms-auto align-items-center gap-3">
             <RouterLink to="/" class="nav-link">Home</RouterLink>
             <RouterLink to="/about" class="nav-link">About</RouterLink>
+            <RouterLink to="/profiles/new" class="btn btn-outline-warning">
+              + Create Profile
+            </RouterLink>
             <button class="btn btn-outline-light" @click="logout">
               Logout
             </button>
           </div>
         </div>
-
       </div>
     </nav>
+
     <div class="subheader container-fluid px-4 py-2">
       <RouterLink to="/profile" class="subheader-link">My Profile</RouterLink>
       <span class="divider">/</span>
       <span class="current-page">{{ currentPage }}</span>
     </div>
-
   </header>
 </template>
+
 
 
 <script setup>
@@ -128,5 +131,17 @@ async function logout() {
 .divider {
   color: #ccc;
 }
+
+.btn-outline-warning {
+  border-color: #ffc107;
+  color: #ffc107;
+  font-weight: 500;
+}
+
+.btn-outline-warning:hover {
+  background-color: #ffc107;
+  color: #16110c;
+}
+
 
 </style>
