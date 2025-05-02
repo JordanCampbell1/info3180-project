@@ -28,6 +28,17 @@
               <p class="card-text mb-1"><strong>Religious:</strong> {{ profile.religious ? 'Yes' : 'No' }}</p>
               <p class="card-text mb-1"><strong>Family Oriented:</strong> {{ profile.family_oriented ? 'Yes' : 'No' }}</p>
               <p class="card-text text-muted mt-3 small">Joined: {{ formatDate(profile.date_joined) }}</p>
+            
+              <div class="d-flex justify-content-between mt-4">
+                <button @click="favouriteUser" class="btn btn-outline-danger">
+                  <i class="bi bi-heart"></i> Favourite
+                </button>
+                <button class="btn btn-outline-secondary" disabled>
+                  <i class="bi bi-envelope"></i> Email Profile
+                </button>
+              </div>
+              <p v-if="favMessage" class="text-success mt-2">{{ favMessage }}</p>
+              <p v-if="favError" class="text-danger mt-2">{{ favError }}</p>
             </div>
           </div>
         </div>
@@ -67,6 +78,27 @@
       loading.value = false
     }
   }
+
+  const favMessage = ref('')
+  const favError = ref('')
+
+  const favouriteUser = async () => {
+    favMessage.value = ''
+    favError.value = ''
+    try {
+      const token = localStorage.getItem('token')
+      const id = profile.value.user_id // Use user_id, not profile.id
+
+      const res = await axios.post(`http://localhost:8080/api/profiles/${id}/favourite`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+
+      favMessage.value = res.data.message || 'Added to favourites.'
+    } catch (err) {
+      favError.value = err.response?.data?.error || err.response?.data?.message || 'Could not add to favourites.'
+    }
+  }
+
   
   onMounted(fetchProfile)
   </script>
