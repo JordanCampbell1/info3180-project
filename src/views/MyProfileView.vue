@@ -15,7 +15,7 @@
           </div>
           <div class="col-md-8">
             <div class="card-body">
-              <h4 class="card-title">{{ user.username }}</h4>
+              <h4 class="card-title">{{ user.name }}</h4>
               <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
               <p class="card-text"><strong>Joined:</strong> {{ formatDate(user.date_joined) }}</p>
             </div>
@@ -40,7 +40,7 @@
               <router-link :to="`/profiles/${profile.id}`" class="btn btn-outline-primary mt-2">View Profile</router-link>
             </div>
             <div class="card-footer text-muted small text-end">
-              Created: {{ formatDate(profile.profile_created) }}
+              Created: {{ formatDate(profile.created_at) }}
             </div>
           </div>
         </div>

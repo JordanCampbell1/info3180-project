@@ -42,7 +42,14 @@ class User(db.Model):
     # Dom
     # For User model
     def to_dict(self):
-        return {"id": self.id, "username": self.username, "email": self.email}
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+            "photo": self.photo,
+            "name": self.name,
+            "date_joined": self.date_joined,
+        }
 
 
 from . import db
@@ -120,6 +127,7 @@ class Profile(db.Model):
             "political": self.political,
             "religious": self.religious,
             "family_oriented": self.family_oriented,
+            "created_at": self.created_at,
         }
 
     def __repr__(self):
