@@ -37,7 +37,18 @@
               <p class="card-text"><strong>Birth Year:</strong> {{ profile.birth_year }}</p>
               <p class="card-text"><strong>Favourite Colour:</strong> {{ profile.fav_colour }}</p>
               <p class="card-text"><strong>Favourite Cuisine:</strong> {{ profile.fav_cuisine }}</p>
-              <router-link :to="`/profiles/${profile.id}`" class="btn btn-outline-primary mt-2">View Profile</router-link>
+              <router-link 
+                :to="`/profiles/${profile.id}`" 
+                class="btn btn-outline-primary me-2 mt-2"
+              >
+                View Profile
+              </router-link>
+              <router-link 
+                :to="`/match-report/${profile.id}`" 
+                class="btn btn-outline-success mt-2"
+              >
+                Match Me
+              </router-link>
             </div>
             <div class="card-footer text-muted small text-end">
               Created: {{ formatDate(profile.created_at) }}
@@ -59,7 +70,7 @@ const userStr = localStorage.getItem('user')
 const userParse = JSON.parse(userStr)
 const userId = userParse.id 
 
-// console.log('User ID:', user.id)
+console.log('User ID:', userId)
 
 const user = ref({})
 const profiles = ref([])
