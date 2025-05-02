@@ -7,16 +7,17 @@
         <input v-model="password" type="password" placeholder="Password" required />
         <input v-model="name" placeholder="Name" required />
         <input v-model="email" type="email" placeholder="Email" required />
+        <input type="file" @change="handleFile" accept="image/*" />
         <button type="submit">Register</button>
       </form>
     </div>
   </div>
 </template>
 
+
 <script>
 import axios from 'axios';
 
-// Send cookies (for CSRF token)
 axios.defaults.withCredentials = true;
 
 export default {
@@ -26,6 +27,7 @@ export default {
       password: '',
       name: '',
       email: '',
+      photoFile: null,
       csrfToken: ''
     };
   },
@@ -38,6 +40,9 @@ export default {
     }
   },
   methods: {
+    handleFile(event) {
+      this.photoFile = event.target.files[0];
+    },
     async register() {
       try {
         const formData = new FormData();
@@ -46,11 +51,15 @@ export default {
         formData.append('name', this.name);
         formData.append('email', this.email);
 
-        // Always include default avatar
-        const resp = await fetch('/defaultAvatar.jpg');
-        const blob = await resp.blob();
-        const file = new File([blob], 'defaultAvatar.jpg', { type: blob.type });
-        formData.append('photo', file);
+        // Use uploaded photo or fallback to default
+        if (this.photoFile) {
+          formData.append('photo', this.photoFile);
+        } else {
+          const resp = await fetch('/defaultAvatar.jpg');
+          const blob = await resp.blob();
+          const file = new File([blob], 'defaultAvatar.jpg', { type: blob.type });
+          formData.append('photo', file);
+        }
 
         await axios.post('http://localhost:8080/api/register', formData, {
           headers: {
@@ -73,6 +82,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 .register-container {

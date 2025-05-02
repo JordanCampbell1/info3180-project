@@ -251,6 +251,7 @@ def get_all_profiles(user_id):
     results = (
         db.session.query(Profile, User)
         .join(User, Profile.user_id_fk == User.id)
+        .filter(User.id != user_id)
         .order_by(Profile.created_at.desc())
         .all()
     )
