@@ -67,6 +67,7 @@ class Profile(db.Model):
     political = db.Column(db.Boolean, nullable=True)
     religious = db.Column(db.Boolean, nullable=True)
     family_oriented = db.Column(db.Boolean, nullable=True)
+    created_at = db.Column(db.DateTime, default=func.now())
 
     user = db.relationship("User", foreign_keys=[user_id_fk])
 

@@ -247,8 +247,43 @@ def logout(user_id):
 @jwt_required
 def get_all_profiles(user_id):
 
-    profiles = Profile.query.all()
-    return jsonify([profile.to_dict() for profile in profiles]), 200
+    # 1. Join Profile and User, order by User.date_joined DESC
+    results = (
+        db.session.query(Profile, User)
+        .join(User, Profile.user_id_fk == User.id)
+        .order_by(Profile.created_at.desc())
+        .all()
+    )
+
+    # 2. Combine data from both models
+    profiles_with_user_info = []
+    for profile, user in results:
+        profiles_with_user_info.append(
+            {
+                "id": profile.id,
+                "user_id": user.id,
+                "description": profile.description,
+                "parish": profile.parish,
+                "biography": profile.biography,
+                "sex": profile.sex,
+                "race": profile.race,
+                "birth_year": profile.birth_year,
+                "height": profile.height,
+                "fav_cuisine": profile.fav_cuisine,
+                "fav_colour": profile.fav_colour,
+                "fav_school_sibject": profile.fav_school_subject,
+                "political": profile.political,
+                "religious": profile.religious,
+                "family_oriented": profile.family_oriented,
+                # From User
+                "username": user.username,
+                "photo": user.photo,
+                "date_joined": user.date_joined.isoformat(),
+                "profile_created": profile.created_at.isoformat(),
+            }
+        )
+
+    return jsonify(profiles_with_user_info), 200
 
 
 @app.route("/api/profiles", methods=["POST"])
@@ -332,10 +367,42 @@ def create_profile():
 @csrf.exempt
 @jwt_required
 def get_profile(user_id, profile_id):
-    profile = db.session.get(Profile, profile_id)
-    if profile:
-        return jsonify(profile.to_dict()), 200
-    return jsonify({"error": "Profile not found"}), 404
+    print("get_profile route was reached")
+    result = (
+        db.session.query(Profile, User)
+        .join(User, Profile.user_id_fk == User.id)
+        .filter(Profile.id == profile_id)
+        .first()
+    )
+
+    if not result:
+        return jsonify({"message": "Profile not found."}), 404
+
+    profile, user = result
+
+    profile_data = {
+        "id": profile.id,
+        "user_id": user.id,
+        "description": profile.description,
+        "parish": profile.parish,
+        "biography": profile.biography,
+        "sex": profile.sex,
+        "race": profile.race,
+        "birth_year": profile.birth_year,
+        "height": profile.height,
+        "fav_cuisine": profile.fav_cuisine,
+        "fav_colour": profile.fav_colour,
+        "fav_school_sibject": profile.fav_school_subject,
+        "political": profile.political,
+        "religious": profile.religious,
+        "family_oriented": profile.family_oriented,
+        "username": user.username,
+        "photo": user.photo,
+        "date_joined": user.date_joined.isoformat(),
+        "profile_created": profile.created_at.isoformat(),
+    }
+
+    return jsonify(profile_data), 200
 
 
 # Add user to favourites
@@ -468,20 +535,53 @@ def search_profiles(user_id):
     sex = request.args.get("sex")
     race = request.args.get("race")
 
-    # Include all profiles (even current user's)
-    query = Profile.query
+    # Start query with Profile + User join
+    query = (
+        db.session.query(Profile, User)
+        .join(User, Profile.user_id_fk == User.id)
+        .filter(User.id != user_id)  # Exclude current user's profiles
+    )
 
+    # Apply filters conditionally
     if name:
-        query = query.filter(Profile.description.ilike(f"%{name}%"))
+        query = query.filter(func.lower(User.username).like(f"%{name.lower()}%"))
     if birth_year:
         query = query.filter(Profile.birth_year == int(birth_year))
     if sex:
-        query = query.filter(Profile.sex == sex)
+        query = query.filter(func.lower(Profile.sex) == sex.lower())
     if race:
-        query = query.filter(Profile.race == race)
+        query = query.filter(func.lower(Profile.race) == race.lower())
 
-    results = query.all()
-    return jsonify([p.to_dict() for p in results]), 200
+    # Execute and format response
+    results = query.order_by(Profile.created_at.desc()).all()
+
+    profiles_with_user_info = []
+    for profile, user in results:
+        profiles_with_user_info.append(
+            {
+                "id": profile.id,
+                "user_id": user.id,
+                "description": profile.description,
+                "parish": profile.parish,
+                "biography": profile.biography,
+                "sex": profile.sex,
+                "race": profile.race,
+                "birth_year": profile.birth_year,
+                "height": profile.height,
+                "fav_cuisine": profile.fav_cuisine,
+                "fav_colour": profile.fav_colour,
+                "fav_school_sibject": profile.fav_school_subject,
+                "political": profile.political,
+                "religious": profile.religious,
+                "family_oriented": profile.family_oriented,
+                "username": user.username,
+                "photo": user.photo,
+                "date_joined": user.date_joined.isoformat(),
+                "profile_created": profile.created_at.isoformat(),
+            }
+        )
+
+    return jsonify(profiles_with_user_info), 200
 
 
 # Testcase

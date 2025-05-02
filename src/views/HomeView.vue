@@ -1,158 +1,301 @@
-<script setup>
-import { ref } from "vue";
-
-let message = ref("Welcome to Jam-Date💕  Find your perfect match today! 💕")
-let sidebarOpen = ref(false);
-
-function toggleSidebar() {
-  sidebarOpen.value = !sidebarOpen.value;
-}
-</script>
-
 <template>
-  <div class="home-container">
-    <!-- Sidebar Menu Button -->
-    <button class="menu-button" @click="toggleSidebar">
-      ☰ Menu
-    </button>
+  <div class="container mt-4">
+    <h2 class="mb-4">Latest Profiles</h2>
 
-    <!-- Sidebar -->
-    <div class="sidebar" :class="{ open: sidebarOpen }">
-      <router-link to="/profiles/favourites">
-        <button class="btn btn-report">View Reports</button>
-      </router-link>
-      <router-link to="/register">
-        <button class="btn btn-register">Register</button>
-      </router-link>
-      <router-link to="/login">
-        <button class="btn btn-login">Login</button>
-      </router-link>
+    <!-- Search Box -->
+    <div class="mb-4 p-3 bg-light rounded">
+      <div class="row g-2 align-items-center">
+        <div class="col-md-6">
+          <input
+            v-model="searchText"
+            type="text"
+            placeholder="Search..."
+            class="form-control"
+          />
+        </div>
+        <div class="col-md-6 d-flex justify-content-md-end gap-2 flex-wrap">
+          <button class="btn btn-secondary" @click="setFilter('name')">Name</button>
+          <button class="btn btn-secondary" @click="setFilter('birth_year')">Birth Year</button>
+          <button class="btn btn-secondary" @click="setFilter('sex')">Sex</button>
+          <button class="btn btn-secondary" @click="setFilter('race')">Race</button>
+          <button class="btn btn-outline-danger" @click="clearSearch">Clear</button>
+        </div>
+      </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="overlay">
-      <h1>{{ message }}</h1>
-      <router-link to="/register">
-        <button class="btn btn-primary m-2">Register</button>
-      </router-link>
-      <router-link to="/login">
-        <button class="btn btn-secondary m-2">Login</button>
-      </router-link>
+    <!-- Profiles Grid -->
+    <div class="row">
+      <div v-for="profile in displayedProfiles" :key="profile.id" class="col-12 col-sm-6 col-lg-3 mb-4">
+        <div class="card h-100 shadow-sm">
+          <div class="img-container">
+            <img
+              :src="profile.photo ? `http://localhost:8080/uploads/${profile.photo}` : `http://localhost:8080/uploads/defaultAvatar.png`"
+              class="card-img-top profile-img"
+              alt="Profile photo"
+            />
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ profile.username }}</h5>
+            <p class="card-text mb-1"><strong>Sex:</strong> {{ profile.sex }}</p>
+            <p class="card-text mb-1"><strong>Race:</strong> {{ profile.race }}</p>
+            <p class="card-text mb-1"><strong>Parish:</strong> {{ profile.parish }}</p>
+
+            <!-- View More Button -->
+            <router-link 
+              :to="`/profiles/${profile.id}`" 
+              class="btn btn-outline-primary mt-auto"
+            >
+              View More Details
+            </router-link>
+          </div>
+
+          <div class="card-footer text-muted small text-end">
+            Joined: {{ formatDate(profile.date_joined) }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div v-if="!loading && displayedProfiles.length === 0" class="alert alert-info text-center">
+      No profiles found.
+    </div>
+    <div v-if="loading" class="alert alert-warning text-center">
+      Loading profiles...
+    </div>
+    <div v-if="error" class="alert alert-danger text-center">
+      {{ error }}
     </div>
   </div>
 </template>
 
 
-<style scoped>
-.home-container {
-  background-image: url('@/assets/Black_love.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import axios from 'axios'
+
+// State
+const allProfiles = ref([])
+const profiles = ref([])
+const searchText = ref('')
+const filterKey = ref('')
+const loading = ref(false)
+const error = ref('')
+const searching = ref(false)
+
+
+// Computed
+const displayedProfiles = computed(() => profiles.value)
+
+
+// Methods
+const fetchProfiles = async () => {
+  loading.value = true
+  error.value = ''
+  searching.value = false
+
+  try {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      error.value = 'Not authenticated. Please log in.'
+      return
+    }
+
+    const res = await axios.get('http://localhost:8080/api/profiles', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+
+    profiles.value = res.data.slice(0, 4) // Only 4 on default load
+  } catch (err) {
+    console.error('Error fetching profiles:', err)
+    error.value = err.response?.data?.message || 'Failed to load profiles'
+  } finally {
+    loading.value = false
+  }
 }
 
-.menu-button {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 200px;
-  background-color: rgba(0, 0, 0, 0.6);
-  color: white;
-  border: none;
-  padding: 12px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  z-index: 1000;
+
+const setFilter = (key) => {
+  filterKey.value = key
+  if (searchText.value) {
+    searchProfiles()
+  }
 }
 
-.sidebar {
-  position: absolute;
-  top: 0;
-  left: -200px; 
-  width: 200px;
-  height: 100%;
-  background-color: rgba(0,0,0,0.8);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 50px;
-  transition: all 0.3s ease;
-  z-index: 500;
+
+
+const clearSearch = () => {
+  filterKey.value = ''
+  searchText.value = ''
+  fetchProfiles() // goes back to 4 latest
 }
 
-.sidebar.open {
-  left: 0; 
+
+
+function formatDate(dateStr) {
+  const options = { year: 'numeric', month: 'short', day: 'numeric' }
+  return new Date(dateStr).toLocaleDateString(undefined, options)
 }
 
-.btn-report {
-  text-decoration: underline;
-  top: 0;
-  color: white;
-  width: 150px;
+const searchProfiles = async () => {
+  loading.value = true
+  error.value = ''
+  searching.value = true
+
+  try {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      error.value = 'Not authenticated. Please log in.'
+      return
+    }
+
+    const params = new URLSearchParams()
+    if (filterKey.value && searchText.value) {
+      params.append(filterKey.value, searchText.value)
+    }
+
+    const res = await axios.get(`http://localhost:8080/api/search?${params.toString()}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+
+    profiles.value = res.data // Full search results
+  } catch (err) {
+    console.error('Search failed:', err)
+    error.value = err.response?.data?.message || 'Search failed'
+  } finally {
+    loading.value = false
+  }
 }
 
-.btn-register {
-  text-decoration: underline;
-  top: 0;
-  color: white;
-  width: 150px;
-}
 
-.btn-login {
-  text-decoration: underline;
-  top: 0;
-  color: white;
-  width: 150px;
-}
 
-.overlay {
-  background-color: rgba(0, 0, 0, 0.6);
-  padding: 50px;
-  border-radius: 16px;
-  text-align: center;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 90%;
-  max-width: 500px;
-}
 
-h1 {
-  font-family: 'Georgia', serif; 
-  font-size: 32px; 
-  font-weight: bold;
-  margin-bottom: 20px;
-}
+// Lifecycle
+onMounted(fetchProfiles)
+</script>
 
-button {
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
+<style>
+  #container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 30vh;
+    background-color: rgb(204, 192, 182);
+    border-radius: 2ch;
+  }
+
+  #inner-container-top {
+    display: flex;
+    width: 77%;
+    height: 25vh;
+    background-color: rgb(180, 163, 146);
+    color: white;
+    padding-left: 16px;
+    padding-top: 16px;
+  }
+
+  #inner-container-bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10vh + 1ch;
+    background-color: rgb(255, 183, 0);
+    margin-bottom: 1ch;
+    border-bottom-left-radius: 2ch;
+    border-bottom-right-radius: 2ch;
+  }
+
+  .search-bar {
+    padding: 8px;
+    width: 250px;
+    border-radius: 6px;
+    border: none;
+    margin-top: 10px;
+    font-size: 16px;
+  }
+
+  .button {
+    margin-left: 16px;
+    margin-top: 32px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: rgb(188, 173, 163);
+  }
+
+  #profiles {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .profile-card {
+    width: 150px;
+    height: 200px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+  }
+
+  .profile-card-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .profile-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    background-color: transparent;
+  }
+
+  .profile-name {
+    position: absolute;
+    bottom: 10px;
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+  }
+
+  .no-profiles, .loading-message, .error-message {
+    width: 100%;
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    color: #333;
+  }
+
+  .img-container {
   width: 100%;
-  transition: all 0.2s ease-in-out;
+  aspect-ratio: 1 / 1; /* Square image container */
+  overflow: hidden;
 }
 
-.btn-primary {
-  background-color: #ff5c8a;
-  color: white;
+.profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.btn-secondary {
-  background-color: #9c27b0;
-  color: white;
-}
-
-button:hover {
-  transform: scale(1.03);
-}
 </style>

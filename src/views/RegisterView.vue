@@ -6,7 +6,7 @@
         <input v-model="username" placeholder="Username" required />
         <input v-model="password" type="password" placeholder="Password" required />
         <input v-model="name" placeholder="Name" required />
-        <input v-model="email" placeholder="Email" required />
+        <input v-model="email" type="email" placeholder="Email" required />
         <button type="submit">Register</button>
       </form>
     </div>
@@ -16,41 +16,57 @@
 <script>
 import axios from 'axios';
 
+// Send cookies (for CSRF token)
+axios.defaults.withCredentials = true;
+
 export default {
   data() {
     return {
       username: '',
       password: '',
-      csrf_token: ''
+      name: '',
+      email: '',
+      csrfToken: ''
     };
   },
-  async created() {
+  async mounted() {
     try {
-      const response = await axios.get('/api/csrf-token');
-      this.csrf_token = response.data.csrf_token;
-    } catch (error) {
-      console.error('Failed to get CSRF token:', error);
+      const { data } = await axios.get('http://localhost:8080/api/csrf-token');
+      this.csrfToken = data.csrf_token;
+    } catch (e) {
+      console.error('Could not fetch CSRF token:', e);
     }
   },
   methods: {
-    async login() {
+    async register() {
       try {
-        const response = await axios.post('/api/auth/login', {
-          username: this.username,
-          password: this.password,
-          csrf_token: this.csrf_token
+        const formData = new FormData();
+        formData.append('username', this.username);
+        formData.append('password', this.password);
+        formData.append('name', this.name);
+        formData.append('email', this.email);
+
+        // Always include default avatar
+        const resp = await fetch('/defaultAvatar.jpg');
+        const blob = await resp.blob();
+        const file = new File([blob], 'defaultAvatar.jpg', { type: blob.type });
+        formData.append('photo', file);
+
+        await axios.post('http://localhost:8080/api/register', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'X-CSRFToken': this.csrfToken
+          }
         });
 
-        const token = response.data.token;
-        // Save JWT Token
-        localStorage.setItem('token', token);
-
-        // Set default Authorization header for Axios
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-        this.$router.push('/');
+        this.$router.push('/login');
       } catch (error) {
-        alert('Login failed');
+        const data = error.response?.data;
+        if (data?.errors) {
+          alert(Object.values(data.errors).flat().join('\n'));
+        } else {
+          alert(data?.message || 'Registration failed');
+        }
         console.error(error);
       }
     }

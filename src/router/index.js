@@ -1,7 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import RegisterView from '../views/RegisterView.vue';
-import LoginView from '../views/LoginView.vue';
+import RegisterView from '../views/RegisterView.vue'
+import LoginView from '../views/LoginView.vue'
+
+// Lazy-loaded views (optimal for performance)
+const AboutView = () => import('../views/AboutView.vue')
+
+/* Middleware: Auth Guard
+function requireAuth(to, from, next) {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    next('/login')  // Redirect to login if no token exists
+  } else {
+    next()
+  }
+}*/
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,8 +22,10 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
-    },{
+      component: HomeView,
+      //beforeEnter: requireAuth
+    },
+    {
       path: '/register',
       name: 'register',
       component: RegisterView
@@ -23,11 +38,19 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      component: AboutView
+    },
+    {
+      path: '/profile',
+      name: 'my-profile',
+      component: () => import('../views/MyProfileView.vue') // Add this line
+    },
+    {
+      path: '/profiles/:id',
+      name: 'ProfileDetails',
+      component: () => import('@/views/ProfileDetails.vue') // or wherever the component is
     }
+    
   ]
 })
 
