@@ -16,14 +16,17 @@
         >
           <div class="card h-100 shadow-sm">
             <div class="card-body">
-              <h5 class="card-title">User ID: {{ match.user_id }}</h5>
+              <h5 class="card-title">{{ match.sex }} - {{ match.race }}</h5>
+              <p class="card-text mb-1"><strong>Name:</strong> {{ match.name }}</p>
+              <p class="card-text mb-1"><strong>Parish:</strong> {{ match.parish }}</p>
+              <p class="card-text mb-1"><strong>Birth Year:</strong> {{ match.birth_year }}</p>
               <p class="card-text mb-1"><strong>Cuisine:</strong> {{ match.fav_cuisine }}</p>
               <p class="card-text mb-1"><strong>Colour:</strong> {{ match.fav_colour }}</p>
               <p class="card-text mb-1"><strong>Subject:</strong> {{ match.fav_school_subject }}</p>
               <p class="card-text mb-1"><strong>Political:</strong> {{ match.political ? 'Yes' : 'No' }}</p>
               <p class="card-text mb-1"><strong>Religious:</strong> {{ match.religious ? 'Yes' : 'No' }}</p>
               <p class="card-text mb-1"><strong>Family Oriented:</strong> {{ match.family_oriented ? 'Yes' : 'No' }}</p>
-  
+
               <div class="mt-3">
                 <strong>Matched Fields:</strong>
                 <ul class="list-unstyled ms-3 mt-2">
@@ -33,6 +36,7 @@
                 </ul>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -49,7 +53,7 @@
   const loading = ref(false)
   const error = ref('')
   
-  const profileId = route.params.id // passed in URL like /match-report/3
+  const profileId = route.params.profileId // passed in URL like /match-report/3
   
   const formatField = (field) => {
     const fieldMap = {
