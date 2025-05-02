@@ -692,6 +692,11 @@ def get_user_profiles(current_user_id, user_id):
     return jsonify(profiles_data), 200
 
 
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file("index.html")
+
+
 ###
 # The functions below should be applicable to all Flask apps.
 
