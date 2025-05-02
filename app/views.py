@@ -681,6 +681,19 @@ def top_favourited_users(user_id, N):
     return jsonify(result), 200
 
 
+@app.route("/api/users/<int:user_id>/profiles", methods=["GET"])
+@csrf.exempt
+@jwt_required
+def get_user_profiles(current_user_id, user_id):
+    profiles = Profile.query.filter_by(user_id_fk=user_id).all()
+
+    if not profiles:
+        return jsonify({"message": "No profiles found for this user."}), 404
+
+    profiles_data = [profile.to_dict() for profile in profiles]
+    return jsonify(profiles_data), 200
+
+
 ###
 # The functions below should be applicable to all Flask apps.
 

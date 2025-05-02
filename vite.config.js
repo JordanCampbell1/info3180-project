@@ -15,5 +15,9 @@ export default defineConfig({
     hmr: {
       port: 3000 // Different from your app port
     }
+  },
+  build:{
+    outDir: 'app/static',
+    emptyOutDir: true,
   }
 })

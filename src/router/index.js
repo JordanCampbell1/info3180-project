@@ -41,7 +41,7 @@ const router = createRouter({
       component: AboutView
     },
     {
-      path: '/profile',
+      path: '/users/:userid',
       name: 'my-profile',
       component: () => import('../views/MyProfileView.vue') // Add this line
     },
@@ -70,6 +70,7 @@ const router = createRouter({
       name: 'NotFound',
       component: () => import('@/views/NotFound.vue')
     },
+    
     
     
   ]

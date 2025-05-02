@@ -33,7 +33,7 @@
     </nav>
 
     <div class="subheader container-fluid px-4 py-2">
-      <RouterLink to="/profile" class="subheader-link">My Profile</RouterLink>
+      <RouterLink to="/users/{{user.id}}" class="subheader-link">My Profile</RouterLink>
       <span class="divider">/</span>
       <span class="current-page">{{ currentPage }}</span>
     </div>
@@ -46,6 +46,12 @@
 import axios from 'axios'
 
 import { useRouter } from 'vue-router'
+
+
+const userStr = localStorage.getItem('user')
+const user = JSON.parse(userStr)
+
+console.log('User ID:', user.id)
 
 const router = useRouter()
 
