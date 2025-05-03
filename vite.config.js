@@ -11,11 +11,6 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  server: {
-    hmr: {
-      port: 3000 // Different from your app port
-    }
-  },
   build:{
     outDir: 'app/static',
     emptyOutDir: true,

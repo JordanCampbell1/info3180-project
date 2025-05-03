@@ -49,9 +49,13 @@ import { useRouter } from 'vue-router'
 
 
 const userStr = localStorage.getItem('user')
-const user = JSON.parse(userStr)
+// if (!userStr) throw new Error('user data missing')
+let user = { id: null, name: null, email: null, profilePicture: null };
+if (userStr) {
+  user = JSON.parse(userStr)
+}
 
-console.log('User ID:', user.id)
+// console.log('User ID:', user.id)
 
 const router = useRouter()
 
