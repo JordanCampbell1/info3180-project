@@ -94,6 +94,12 @@ def index():
     return app.send_static_file("index.html")
 
 
+@app.route("/assets/<path:filename>")
+def send_assets(filename):
+    """Serve static files from the assets directory."""
+    return app.send_static_file(os.path.join("assets", filename))
+
+
 @app.route("/api/register", methods=["POST"])
 def register():
     form = RegisterForm()
