@@ -94,6 +94,12 @@ def index():
     return app.send_static_file("index.html")
 
 
+@app.route("/assets/<path:filename>")
+def send_assets(filename):
+    """Serve static files from the assets directory."""
+    return app.send_static_file(os.path.join("assets", filename))
+
+
 @app.route("/api/register", methods=["POST"])
 def register():
     form = RegisterForm()
@@ -361,9 +367,8 @@ def create_profile():
 
 
 # Get details of a specific profile
-##########################################################################
-# Working in Postman#######################################################
-##########################################################################
+
+
 @app.route("/api/profiles/<int:profile_id>", methods=["GET"])
 @csrf.exempt
 @jwt_required
@@ -407,9 +412,8 @@ def get_profile(user_id, profile_id):
 
 
 # Add user to favourites
-##########################################################################
-# Working in Postman#######################################################
-##########################################################################
+
+
 @app.route("/api/profiles/<int:user_id2>/favourite", methods=["POST"])
 @csrf.exempt
 @jwt_required
@@ -430,11 +434,7 @@ def favourite_user(user_id, user_id2):
     return jsonify({"message": "User added to favourites"}), 201
 
 
-# extra
-#################################################################
-# Working in Postman#######################################################
 # UPDATE PROFILE
-#################################################################
 @app.route("/api/profiles/<int:profile_id>", methods=["PUT"])
 @csrf.exempt
 @jwt_required
@@ -473,9 +473,6 @@ def update_profile(user_id, profile_id):
 # Part 2 point 7
 
 
-#################################################################
-# Working in Postman#######################################################
-#################################################################
 @app.route("/api/profiles/matches/<int:profile_id>", methods=["GET"])
 @csrf.exempt
 @jwt_required
@@ -537,9 +534,6 @@ def match_profiles(user_id, profile_id):
 
 
 # Search profiles
-#################################################################
-# Working in Postman#######################################################
-#################################################################
 
 
 @app.route("/api/search", methods=["GET"])
@@ -600,15 +594,9 @@ def search_profiles(user_id):
     return jsonify(profiles_with_user_info), 200
 
 
-# Testcase
-# http://localhost:8080/api/search?birth_year=2002&race=Black&sex=Female
-# return id=3
-
-
 # Get details of a user
-#################################################################
-# Working in Postman#######################################################
-#################################################################
+
+
 @app.route("/api/users/<int:user_id2>", methods=["GET"])
 @csrf.exempt
 @jwt_required
@@ -622,9 +610,6 @@ def get_user(user_id, user_id2):
 # Get users that a user has favourited
 
 
-##########################################################################
-# Working in Postman#######################################################
-##########################################################################
 @app.route("/api/users/<int:user_id2>/favourites", methods=["GET"])
 @csrf.exempt
 @jwt_required
@@ -645,9 +630,6 @@ def user_favourites(user_id, user_id2):
     return jsonify(data), 200
 
 
-##########################################################################
-# Working in Postman#######################################################
-##########################################################################
 @app.route("/api/users/favourites/<int:N>", methods=["GET"])
 @csrf.exempt
 @jwt_required
@@ -692,12 +674,20 @@ def get_user_profiles(current_user_id, user_id):
     return jsonify(profiles_data), 200
 
 
-@app.errorhandler(404)
-def not_found(e):
-    return app.send_static_file("index.html")
+#######
+######
+#####
+
+# catch call for vue router to redirect all calls to the index.html file
+# @app.errorhandler(404)
+# def not_found(e):
+#     return app.send_static_file("index.html")
+
+#####
+#####
+####
 
 
-###
 # The functions below should be applicable to all Flask apps.
 
 
