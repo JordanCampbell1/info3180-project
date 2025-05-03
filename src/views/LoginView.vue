@@ -34,6 +34,9 @@ export default {
 
   async mounted() {
     try {
+
+      console.log("VITE_API_URL =", import.meta.env.VITE_API_URL);
+
       console.log("mounted hook running...");
       const { data } = await api.get('/api/csrf-token');
       console.log("CSRF token fetched:", data.csrf_token);
