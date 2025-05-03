@@ -38,4 +38,4 @@ venv
 #ide env
 package-lock.json
 
-/uploads/
+uploads/
