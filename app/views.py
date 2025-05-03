@@ -699,10 +699,12 @@ def get_user_profiles(current_user_id, user_id):
 ######
 #####
 
+
 # catch call for vue router to redirect all calls to the index.html file
-# @app.errorhandler(404)
-# def not_found(e):
-#     return app.send_static_file("index.html")
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file("index.html")
+
 
 #####
 #####

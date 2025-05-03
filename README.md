@@ -68,3 +68,13 @@ INSERT INTO profile (
 (24, 24, 'Test description', 'kingston', 'bio', 'Female', 'Black', 2005, 1.87, 'Jamaican', 'Blue', 'Chemistry', true, false, true, '2025-04-08 10:03:17'),
 (25, 24, 'Test description', 'kingston', 'bio', 'Female', 'White', 2005, 1.91, 'Chinese', 'Blue', 'Math', false, false, true, '2025-04-08 11:45:00'),
 (26, 26, 'Test description', 'kingston', 'bio', 'Female', 'White', 2005, 1.98, 'Jamaican', 'Blue', 'Chemistry', true, false, true, '2025-04-09 09:40:26');
+
+
+#stuff to complete
+
+
+complete visual redesign -tristan
+
+when you click my profile and you dont have a profile, it leads you to create a profile
+
+put placeholders for when there is an empty space for favoruites page
