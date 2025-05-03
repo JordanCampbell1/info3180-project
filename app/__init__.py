@@ -24,4 +24,9 @@ else:
     # Restrict or disable CORS in production
     CORS(app, origins=["https://jam-date.onrender.com"], supports_credentials=True)
 
+import os
+
+os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+
+
 from app import views, models
