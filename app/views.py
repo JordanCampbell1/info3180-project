@@ -84,9 +84,14 @@ def jwt_required(f):  ##jwt required decorator to attach to the relevant routes
     return wrapper
 
 
-###
-# Routing for your application.
-###
+####
+####
+####
+
+# this is the route for the index page
+# and the static files (assets) folder
+# this is where the vue app will be served from
+# the vue app will be served from the index.html file in the static folder
 
 
 @app.route("/")
@@ -98,6 +103,22 @@ def index():
 def send_assets(filename):
     """Serve static files from the assets directory."""
     return app.send_static_file(os.path.join("assets", filename))
+
+
+@app.route("/<path:filename>")
+def send_assets(filename):
+    """Serve static file icon from the static directory."""
+    return app.send_static_file(filename)
+
+
+####
+####
+####
+
+
+###
+# Routing for your application.
+###
 
 
 @app.route("/api/register", methods=["POST"])
