@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '../api';  // Adjust the path as necessary
 
 // Ensure cookies (for CSRF) are always sent
-axios.defaults.withCredentials = true;
+api.defaults.withCredentials = true;
 
 export default {
   data() {
@@ -35,7 +35,7 @@ export default {
   async mounted() {
     try {
       console.log("mounted hook running...");
-      const { data } = await axios.get('http://localhost:8080/api/csrf-token');
+      const { data } = await api.get('/api/csrf-token');
       console.log("CSRF token fetched:", data.csrf_token);
       this.csrfToken = data.csrf_token;
     } catch (e) {
@@ -55,7 +55,7 @@ export default {
 
         console.log("Attempting login with URL encoded format:", formData.toString());
 
-        const response = await axios.post("http://localhost:8080/api/auth/login", formData, {
+        const response = await api.post("/api/auth/login", formData, {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",  // Flask-WTF expects this format
             "X-CSRFToken": this.csrfToken  // Include CSRF token
@@ -66,7 +66,7 @@ export default {
         console.log("Token received:", token);
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
         console.log("Login successful, redirecting...");
         this.$router.push("/");

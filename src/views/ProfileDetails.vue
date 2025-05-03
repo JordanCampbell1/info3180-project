@@ -6,7 +6,7 @@
         <div class="row g-0">
           <div class="col-md-5">
             <img
-              :src="profile.photo ? `http://localhost:8080/uploads/${profile.photo}` : `http://localhost:8080/uploads/defaultAvatar.png`"
+              :src="profile.photo ? `${API_BASE_URL}/uploads/${profile.photo}` : `${API_BASE_URL}/uploads/defaultAvatar.png`"
               class="img-fluid rounded-start h-100"
               alt="Profile Picture"
               style="object-fit: cover;"
@@ -49,7 +49,8 @@
   <script setup>
   import { ref, onMounted } from 'vue'
   import { useRoute } from 'vue-router'
-  import axios from 'axios'
+  import api from '../api'
+  import { API_BASE_URL } from '../config'
   
   const route = useRoute()
   const profile = ref({})
@@ -67,7 +68,7 @@
       const token = localStorage.getItem('token')
       const id = route.params.id
   
-      const res = await axios.get(`http://localhost:8080/api/profiles/${id}`, {
+      const res = await api.get(`/api/profiles/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
   
@@ -89,7 +90,7 @@
       const token = localStorage.getItem('token')
       const id = profile.value.user_id // Use user_id, not profile.id
 
-      const res = await axios.post(`http://localhost:8080/api/profiles/${id}/favourite`, {}, {
+      const res = await api.post(`/api/profiles/${id}/favourite`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       })
 

@@ -92,7 +92,7 @@
   
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import api from '../api'
 
 const userStr = localStorage.getItem('user')
 const user = JSON.parse(userStr)
@@ -125,7 +125,7 @@ const messageType = ref('')
 // Fetch CSRF token on mount
 const fetchCSRFToken = async () => {
   try {
-    const res = await axios.get('http://localhost:8080/api/csrf-token', { withCredentials: true })
+    const res = await api.get('/api/csrf-token', { withCredentials: true })
     csrfToken.value = res.data.csrf_token
   } catch (err) {
     console.error('Failed to fetch CSRF token:', err)
@@ -138,7 +138,7 @@ const fetchCSRFToken = async () => {
 const submitProfile = async () => {
   message.value = ''
   try {
-    await axios.post('http://localhost:8080/api/profiles', form.value, {
+    await api.post('/api/profiles', form.value, {
       headers: {
         'X-CSRFToken': csrfToken.value,
       },

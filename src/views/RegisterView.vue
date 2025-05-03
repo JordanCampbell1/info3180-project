@@ -16,9 +16,9 @@
 
 
 <script>
-import axios from 'axios';
+import api from '../api';
 
-axios.defaults.withCredentials = true;
+api.defaults.withCredentials = true;
 
 export default {
   data() {
@@ -33,7 +33,7 @@ export default {
   },
   async mounted() {
     try {
-      const { data } = await axios.get('http://localhost:8080/api/csrf-token');
+      const { data } = await api.get('/api/csrf-token');
       this.csrfToken = data.csrf_token;
     } catch (e) {
       console.error('Could not fetch CSRF token:', e);
@@ -61,7 +61,7 @@ export default {
           formData.append('photo', file);
         }
 
-        await axios.post('http://localhost:8080/api/register', formData, {
+        await api.post('/api/register', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'X-CSRFToken': this.csrfToken

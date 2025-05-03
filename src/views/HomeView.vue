@@ -29,7 +29,7 @@
         <div class="card h-100 shadow-sm">
           <div class="img-container">
             <img
-              :src="profile.photo ? `http://localhost:8080/uploads/${profile.photo}` : `http://localhost:8080/uploads/defaultAvatar.png`"
+              :src="profile.photo ? `${API_BASE_URL}/uploads/${profile.photo}` : `${API_BASE_URL}/uploads/defaultAvatar.png`"
               class="card-img-top profile-img"
               alt="Profile photo"
             />
@@ -73,7 +73,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import axios from 'axios'
+import api from '../api'
+import { API_BASE_URL } from '../config'
 
 // State
 const allProfiles = ref([])
@@ -102,7 +103,7 @@ const fetchProfiles = async () => {
       return
     }
 
-    const res = await axios.get('http://localhost:8080/api/profiles', {
+    const res = await api.get('/api/profiles', {
       headers: { Authorization: `Bearer ${token}` }
     })
 
@@ -155,7 +156,7 @@ const searchProfiles = async () => {
       params.append(filterKey.value, searchText.value)
     }
 
-    const res = await axios.get(`http://localhost:8080/api/search?${params.toString()}`, {
+    const res = await api.get(`/api/search?${params.toString()}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
 

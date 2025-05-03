@@ -13,7 +13,7 @@
           >
             <div class="card h-100 text-center shadow-sm">
               <img
-                :src="user.photo ? `http://localhost:8080/uploads/${user.photo}` : `http://localhost:8080/uploads/defaultAvatar.png`"
+                :src="user.photo ? `${API_BASE_URL}/uploads/${user.photo}` : `${API_BASE_URL}/uploads/defaultAvatar.png`"
                 class="card-img-top mx-auto d-block mt-3"
                 alt="Profile photo"
                 style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;"
@@ -38,7 +38,7 @@
           >
             <div class="card h-100 text-center shadow-sm">
               <img
-                :src="user.photo ? `http://localhost:8080/uploads/${user.photo}` : `http://localhost:8080/uploads/defaultAvatar.png`"
+                :src="user.photo ? `${API_BASE_URL}/uploads/${user.photo}` : `${API_BASE_URL}/uploads/defaultAvatar.png`"
                 class="card-img-top mx-auto d-block mt-3"
                 alt="Profile photo"
                 style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;"
@@ -66,7 +66,9 @@
   
   <script setup>
   import { onMounted, ref } from 'vue'
-  import axios from 'axios'
+  import api from '../api'
+  import { API_BASE_URL } from '../config';
+
   
   const userStr = localStorage.getItem('user')
   const user = JSON.parse(userStr)
@@ -85,10 +87,10 @@
       if (!token) throw new Error('Not authenticated')
   
       const [topRes, myRes] = await Promise.all([
-        axios.get('http://localhost:8080/api/users/favourites/20', {
+        api.get('/api/users/favourites/20', {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        axios.get(`http://localhost:8080/api/users/${user.id}/favourites`, {
+        api.get(`/api/users/${user.id}/favourites`, {
           headers: { Authorization: `Bearer ${token}` }
         })
       ])

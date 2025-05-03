@@ -46,7 +46,7 @@
   <script setup>
   import { ref, onMounted } from 'vue'
   import { useRoute } from 'vue-router'
-  import axios from 'axios'
+  import api from '../api'
   
   const route = useRoute()
   const matches = ref([])
@@ -71,7 +71,7 @@
     loading.value = true
     try {
       const token = localStorage.getItem('token')
-      const res = await axios.get(`http://localhost:8080/api/profiles/matches/${profileId}`, {
+      const res = await api.get(`/api/profiles/matches/${profileId}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       matches.value = res.data
