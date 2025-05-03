@@ -106,7 +106,7 @@ def send_assets(filename):
 
 
 @app.route("/<path:filename>")
-def send_assets(filename):
+def send_favicon(filename):
     """Serve static file icon from the static directory."""
     return app.send_static_file(filename)
 
