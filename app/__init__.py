@@ -14,7 +14,14 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 csrf = CSRFProtect(app)
 
-# # 🔹 Enable CORS - Allow requests from Vue frontend
-CORS(app, origins=["http://localhost:5173"], supports_credentials=True)
+
+flask_env = app.config["FLASK_ENV"]
+
+if flask_env == "development":
+    # # 🔹 Enable CORS - Allow requests from Vue frontend
+    CORS(app, origins=["http://localhost:5173"], supports_credentials=True)
+else:
+    # Restrict or disable CORS in production
+    CORS(app, origins=["https://jam-date.onrender.com"], supports_credentials=True)
 
 from app import views, models
