@@ -73,7 +73,7 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';
+import api from '../api';
 
 const route = useRoute();
 const router = useRouter();
@@ -96,7 +96,7 @@ const fetchProfile = async () => {
   }
 
   try {
-    const res = await axios.get(`http://localhost:8080/api/profiles/${user.id}`, {
+    const res = await api.get(`/api/profiles/${user.id}`, {
       headers: { 
         Authorization: `Bearer ${localStorage.getItem("token")}`
       }
@@ -126,8 +126,8 @@ const createProfile = async () => {
       user_id: user.id
     };
     
-    const res = await axios.post(
-      `http://localhost:8080/api/profiles`,
+    const res = await api.post(
+      `/api/profiles`,
       profileData,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -150,8 +150,8 @@ const saveProfile = async () => {
   saving.value = true;
   try {
     const token = localStorage.getItem('token');
-    const res = await axios.put(
-      `http://localhost:8080/api/profiles/${user.id}`,
+    const res = await api.put(
+      `/api/profiles/${user.id}`,
       editable.value,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -176,8 +176,8 @@ const addToFavourites = async () => {
   console.log("Adding profile to favourites:", profile.value.id);
   try {
     const token = localStorage.getItem('token');
-    await axios.post(
-      'http://localhost:8080/api/favourites',
+    await api.post(
+      '/api/favourites',
       { profile_id: profile.value.id },
       { headers: { Authorization: `Bearer ${token}` } }
     );

@@ -8,7 +8,7 @@
         <div class="row g-0">
           <div class="col-md-4 d-flex justify-content-center align-items-center p-3">
             <img
-              :src="user.photo ? `http://localhost:8080/uploads/${user.photo}` : `http://localhost:8080/uploads/defaultAvatar.png`"
+              :src="user.photo ? `${API_BASE_URL}/uploads/${user.photo}` : `${API_BASE_URL}/uploads/defaultAvatar.png`"
               class="img-fluid rounded-circle user-img"
               alt="User Photo"
             />
@@ -63,7 +63,8 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import axios from 'axios'
+import api from '../api'
+import { API_BASE_URL } from '../config'
 
 const route = useRoute()
 const userStr = localStorage.getItem('user')
@@ -90,11 +91,11 @@ const fetchUserAndProfiles = async () => {
     const token = localStorage.getItem('token')
     if (!token) throw new Error('Not authenticated')
 
-    const userRes = await axios.get(`http://localhost:8080/api/users/${userId}`, {
+    const userRes = await api.get(`/api/users/${userId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
 
-    const profileRes = await axios.get(`http://localhost:8080/api/users/${userId}/profiles`, {
+    const profileRes = await api.get(`/api/users/${userId}/profiles`, {
       headers: { Authorization: `Bearer ${token}` }
     })
 

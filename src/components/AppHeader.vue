@@ -43,14 +43,14 @@
 
 
 <script setup>
-import axios from 'axios'
+import api from '../api'
 
 import { useRouter } from 'vue-router'
 
 
 const userStr = localStorage.getItem('user')
 // if (!userStr) throw new Error('user data missing')
-let user = { id: null, name: null, email: null, profilePicture: null };
+let user = { id: null, name: null };
 if (userStr) {
   user = JSON.parse(userStr)
 }
@@ -64,7 +64,7 @@ async function logout() {
     const token = localStorage.getItem('token')
     if (!token) throw new Error('JWT token missing')
 
-    await axios.post('http://localhost:8080/api/auth/logout', {}, {
+    await api.post('/api/auth/logout', {}, {
       headers: {
         Authorization: `Bearer ${token}`
       }
