@@ -19,6 +19,7 @@
 
 <script>
 import api from '../api';  // Adjust the path as necessary
+import { API_BASE_URL } from '../config';
 
 // Ensure cookies (for CSRF) are always sent
 api.defaults.withCredentials = true;
@@ -35,7 +36,7 @@ export default {
   async mounted() {
     try {
 
-      console.log("VITE_API_URL =", import.meta.env.VITE_API_URL);
+      console.log("VITE_API_URL =", API_BASE_URL);
 
       console.log("mounted hook running...");
       const { data } = await api.get('/api/csrf-token');
