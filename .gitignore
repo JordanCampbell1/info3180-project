@@ -33,6 +33,8 @@ venv
 
 # Environment Variables
 .env
+.env.production
+
 .flaskenv
 
 #ide env

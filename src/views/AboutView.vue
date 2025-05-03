@@ -52,6 +52,7 @@
 
 <script setup>
 // No logic needed for now — purely static content
+// sdsdsd fdsfds
 </script>
 
 <style scoped>
