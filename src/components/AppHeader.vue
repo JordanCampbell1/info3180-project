@@ -89,6 +89,7 @@ async function logout() {
   color: azure !important;
   font-weight: 500;
   margin-left: 8px;
+  font-size: px;
 }
 
 .navbar-brand {
@@ -102,7 +103,7 @@ async function logout() {
 .navbar .nav-link:hover {
   text-decoration: underline;
   color: #ffffff;
-  margin-right: 24px;
+  /*margin-right: 24px;*/
   text-decoration: none;
 }
 
@@ -117,7 +118,7 @@ async function logout() {
 }
 
 .subheader {
-  background-color: #8e7b67;
+  background-color: #ff4989;
   color: #f5f5f5;
   font-size: 14px;
   display: flex;
@@ -130,9 +131,11 @@ async function logout() {
 }
 
 .subheader-link {
-  color: #ffc107;
+  color: #ffffff;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 800;
+  font-size: 16px;
+  text-decoration: none;
 }
 
 .subheader-link:hover {
@@ -147,6 +150,7 @@ async function logout() {
   border-color: #ffc107;
   color: #ffc107;
   font-weight: 500;
+  font-size: 14px;
 }
 
 .btn-outline-warning:hover {
@@ -158,6 +162,7 @@ async function logout() {
   color: #0dcaf0;
   border-color: #0dcaf0;
   font-weight: 500;
+  font-size: 14px;
 }
 
 .btn-outline-info:hover {
