@@ -689,17 +689,29 @@ def get_user_profiles(current_user_id, user_id):
 # and the static files (assets) folder
 # this is where the vue app will be served from
 # the vue app will be served from the index.html file in the static folder
-@app.route("/<path:path>")
-def serve_vue(path):
-    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
-        return send_from_directory(app.static_folder, path)
-    else:
-        # Fallback: serve index.html for Vue routes
-        return send_from_directory(app.static_folder, "index.html")
+
+# @app.route("/<path:path>")
+# def serve_vue(path):
+#     if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+#         return send_from_directory(app.static_folder, path)
+#     else:
+#         # Fallback: serve index.html for Vue routes
+#         return send_from_directory(app.static_folder, "index.html")
 
 
 @app.route("/")
 def index():
+    return app.send_static_file("index.html")
+
+
+# --- OPTIONAL: 404 HANDLER ---
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file("index.html")
+
+
+@app.errorhandler(500)
+def internal_server_error(e):
     return app.send_static_file("index.html")
 
 
