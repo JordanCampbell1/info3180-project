@@ -1,4 +1,5 @@
 from flask import Flask
+
 from .config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -31,3 +32,8 @@ os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
 
 from app import views, models
+from .seed import seed_users  # Import the seed function
+
+
+with app.app_context():
+    seed_users()
