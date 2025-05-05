@@ -701,9 +701,13 @@ def get_user_profiles(current_user_id, user_id):
 
 
 # catch call for vue router to redirect all calls to the index.html file
-@app.errorhandler(404)
-def not_found(e):
-    return app.send_static_file("index.html")
+@app.route("/<path:path>")
+def serve_vue(path=""):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    else:
+        # Fallback: serve index.html for Vue routes
+        return send_from_directory(app.static_folder, "index.html")
 
 
 #####
