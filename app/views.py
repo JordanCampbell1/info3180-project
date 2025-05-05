@@ -593,6 +593,7 @@ def search_profiles(user_id):
                 "religious": profile.religious,
                 "family_oriented": profile.family_oriented,
                 "username": user.username,
+                "name": user.name,
                 "photo": user.photo,
                 "date_joined": user.date_joined.isoformat(),
                 "profile_created": profile.created_at.isoformat(),
