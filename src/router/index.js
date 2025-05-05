@@ -66,6 +66,11 @@ const router = createRouter({
       component: () => import('@/views/Favourites.vue') // or wherever the component is
     },
     {
+      path: '/logout',
+      name: 'Log Out', 
+      component: () => import('@/views/LogOutView.vue') // or wherever the component is
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'Not Found',
       component: () => import('@/views/NotFound.vue')

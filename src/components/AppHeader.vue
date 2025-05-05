@@ -25,9 +25,11 @@
               + Create Profile
             </RouterLink>
             <RouterLink to="/profiles/favourites" class="btn btn-outline-info">💖 Favourites</RouterLink>
-            <button class="btn btn-outline-light" @click="logout">
+            <RouterLink to="/logout" class="btn btn-outline-light">Logout</RouterLink>
+
+            <!-- <button class="btn btn-outline-light" @click="logout">
               Logout
-            </button>
+            </button> -->
           </div>
         </div>
       </div>
@@ -76,25 +78,25 @@ const router = useRouter()
 
 
 
-async function logout() {
-  try {
-    const token = localStorage.getItem('token')
-    if (!token) throw new Error('JWT token missing')
+// async function logout() {
+//   try {
+//     const token = localStorage.getItem('token')
+//     if (!token) throw new Error('JWT token missing')
 
-    await api.post('/api/auth/logout', {}, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+//     await api.post('/api/auth/logout', {}, {
+//       headers: {
+//         Authorization: `Bearer ${token}`
+//       }
+//     })
 
-    // Clean up and redirect
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    router.push('/login')
-  } catch (err) {
-    console.error('Logout failed:', err)
-  }
-}
+//     // Clean up and redirect
+//     localStorage.removeItem('token')
+//     localStorage.removeItem('user')
+//     router.push('/login')
+//   } catch (err) {
+//     console.error('Logout failed:', err)
+//   }
+// }
 </script>
 
 <style>
