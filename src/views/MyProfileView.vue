@@ -73,7 +73,7 @@ const userStr = localStorage.getItem('user')
 const userParse = JSON.parse(userStr)
 const userId = userParse.id 
 
-console.log('User ID:', userId)
+//console.log('User ID:', userId)
 
 const user = ref({})
 const profiles = ref([])
@@ -103,7 +103,7 @@ const fetchUserAndProfiles = async () => {
 
     user.value = userRes.data
     profiles.value = profileRes.data
-    console.log('Profiles:', profiles.value)
+    //console.log('Profiles:', profiles.value)
   }  catch (err) {
     const msg = err.response?.data?.message
     if (msg === 'No profiles found for this user.') {

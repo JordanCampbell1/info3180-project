@@ -75,7 +75,7 @@
   const userStr = localStorage.getItem('user')
   const user = JSON.parse(userStr)
 
-  console.log('User ID:', user.id)
+  //console.log('User ID:', user.id)
 
   const favourites = ref([])
   const topFavoured = ref([])
