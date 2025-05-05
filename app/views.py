@@ -562,7 +562,7 @@ def search_profiles(user_id):
 
     # Apply filters conditionally
     if name:
-        query = query.filter(func.lower(User.username).like(f"%{name.lower()}%"))
+        query = query.filter(func.lower(User.name).like(f"%{name.lower()}%"))
     if birth_year:
         query = query.filter(Profile.birth_year == int(birth_year))
     if sex:
