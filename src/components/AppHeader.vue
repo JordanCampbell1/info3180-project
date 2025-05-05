@@ -2,7 +2,7 @@
   <header>
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
-        <a class="navbar-brand" href="/">Jam + Date</a>
+        <RouterLink class="navbar-brand" to="/">Jam + Date</RouterLink>
 
         <button
           class="navbar-toggler"

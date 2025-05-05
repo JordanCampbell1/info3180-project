@@ -25,6 +25,8 @@
 
 <script>
 import api from '../api';
+import defaultAvatar from '@/assets/defaultAvatar.jpg'; // ✅ import the image from assets
+
 
 api.defaults.withCredentials = true;
 
@@ -63,7 +65,7 @@ export default {
         if (this.photoFile) {
           formData.append('photo', this.photoFile);
         } else {
-          const resp = await fetch('/defaultAvatar.jpg');
+          const resp = await fetch(defaultAvatar);
           const blob = await resp.blob();
           const file = new File([blob], 'defaultAvatar.jpg', { type: blob.type });
           formData.append('photo', file);

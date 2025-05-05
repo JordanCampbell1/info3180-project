@@ -13,7 +13,7 @@
           >
             <div class="card h-100 text-center shadow-sm">
               <img
-                :src="user.photo ? `${API_BASE_URL}/uploads/${user.photo}` : `${API_BASE_URL}/uploads/defaultAvatar.png`"
+                :src="user.photo ? `${API_BASE_URL}/uploads/${user.photo}` : defaultAvatar"
                 class="card-img-top mx-auto d-block mt-3"
                 alt="Profile photo"
                 style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;"
@@ -68,6 +68,8 @@
   import { onMounted, ref } from 'vue'
   import api from '../api'
   import { API_BASE_URL } from '../config';
+  import defaultAvatar from '@/assets/defaultAvatar.jpg'; // ✅ import the image from assets
+
 
   
   const userStr = localStorage.getItem('user')

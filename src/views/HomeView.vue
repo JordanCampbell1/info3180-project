@@ -29,7 +29,7 @@
         <div class="card h-100 shadow-sm">
           <div class="img-container">
             <img
-              :src="profile.photo ? `${API_BASE_URL}/uploads/${profile.photo}` : `${API_BASE_URL}/uploads/defaultAvatar.png`"
+              :src="profile.photo ? `${API_BASE_URL}/uploads/${profile.photo}` : defaultAvatar"
               class="card-img-top profile-img"
               alt="Profile photo"
             />
@@ -75,6 +75,8 @@
 import { ref, computed, onMounted } from 'vue'
 import api from '../api'
 import { API_BASE_URL } from '../config'
+import defaultAvatar from '@/assets/defaultAvatar.jpg';
+
 
 // State
 const allProfiles = ref([])

@@ -6,7 +6,7 @@
         <div class="row g-0">
           <div class="col-md-5">
             <img
-              :src="profile.photo ? `${API_BASE_URL}/uploads/${profile.photo}` : `${API_BASE_URL}/uploads/defaultAvatar.png`"
+              :src="profile.photo ? `${API_BASE_URL}/uploads/${profile.photo}` : defaultAvatar"
               class="img-fluid rounded-start h-100"
               alt="Profile Picture"
               style="object-fit: cover;"
@@ -20,7 +20,7 @@
               <p class="card-text mb-1"><strong>Sex:</strong> {{ profile.sex }}</p>
               <p class="card-text mb-1"><strong>Race:</strong> {{ profile.race }}</p>
               <p class="card-text mb-1"><strong>Birth Year:</strong> {{ profile.birth_year }}</p>
-              <p class="card-text mb-1"><strong>Height:</strong> {{ profile.height }} in</p>
+              <p class="card-text mb-1"><strong>Height:</strong> {{ profile.height }} metres</p>
               <p class="card-text mb-1"><strong>Fav Cuisine:</strong> {{ profile.fav_cuisine }}</p>
               <p class="card-text mb-1"><strong>Fav Colour:</strong> {{ profile.fav_colour }}</p>
               <p class="card-text mb-1"><strong>School Subject:</strong> {{ profile.fav_school_sibject }}</p>
@@ -51,6 +51,8 @@
   import { useRoute } from 'vue-router'
   import api from '../api'
   import { API_BASE_URL } from '../config'
+  import defaultAvatar from '@/assets/defaultAvatar.jpg'; // ✅ import the image from assets
+
   
   const route = useRoute()
   const profile = ref({})
