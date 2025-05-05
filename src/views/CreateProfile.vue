@@ -1,7 +1,7 @@
 <template>
     <div class="container mt-5">
       <div class="card shadow-lg">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-pink text-white">
           <h4 class="mb-0">Create New Profile</h4>
         </div>
         <div class="card-body">
@@ -157,3 +157,10 @@ const submitProfile = async () => {
 // Fetch CSRF token once
 onMounted(fetchCSRFToken)
 </script>
+
+<style scoped>
+.bg-pink {
+  background-color: #ff4b91; /* Hot pink */
+  color: white;
+}
+</style>
