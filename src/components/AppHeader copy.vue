@@ -2,7 +2,7 @@
   <header>
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
-        <RouterLink class="navbar-brand" to="/">Jam + Date</RouterLink>
+        <a class="navbar-brand" href="/">Jam + Date</a>
 
         <button
           class="navbar-toggler"
@@ -20,26 +20,23 @@
           <div class="d-flex ms-auto align-items-center gap-3">
             <RouterLink to="/" class="btn btn-outline-light">Home</RouterLink>
             <RouterLink to="/about" class="btn btn-outline-light">About</RouterLink>
-            <RouterLink :to="`/users/${user.id}`" class="btn btn-outline-light">My Profile</RouterLink>
             <RouterLink to="/profiles/new" class="btn btn-outline-warning">
               + Create Profile
             </RouterLink>
             <RouterLink to="/profiles/favourites" class="btn btn-outline-info">💖 Favourites</RouterLink>
-            <RouterLink to="/logout" class="btn btn-outline-light">Logout</RouterLink>
-
-            <!-- <button class="btn btn-outline-light" @click="logout">
+            <button class="btn btn-outline-light" @click="logout">
               Logout
-            </button> -->
+            </button>
           </div>
         </div>
       </div>
     </nav>
 
     <div class="subheader container-fluid px-4 py-2">
+      <RouterLink :to="`/users/${user.id}`" class="subheader-link">My Profile</RouterLink>
       <span class="divider">/</span>
       <span class="current-page">{{ currentPage }}</span>
     </div>
-
   </header>
 </template>
 
@@ -48,21 +45,7 @@
 <script setup>
 import api from '../api'
 
-import { useRouter, useRoute } from 'vue-router'
-import { computed } from 'vue'
-
-const route = useRoute()
-
-// Dynamically set current page based on the route's name or path
-const currentPage = computed(() => {
-  if (route.name) {
-    // You could customize this to get more user-friendly page names
-    return route.name.charAt(0).toUpperCase() + route.name.slice(1)
-  }
-  // If the route name is not available, fallback to using the path (optionally)
-  return route.path.split('/').pop().toUpperCase()
-})
-
+import { useRouter } from 'vue-router'
 
 
 const userStr = localStorage.getItem('user')
@@ -76,33 +59,31 @@ if (userStr) {
 
 const router = useRouter()
 
+async function logout() {
+  try {
+    const token = localStorage.getItem('token')
+    if (!token) throw new Error('JWT token missing')
 
+    await api.post('/api/auth/logout', {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
 
-// async function logout() {
-//   try {
-//     const token = localStorage.getItem('token')
-//     if (!token) throw new Error('JWT token missing')
-
-//     await api.post('/api/auth/logout', {}, {
-//       headers: {
-//         Authorization: `Bearer ${token}`
-//       }
-//     })
-
-//     // Clean up and redirect
-//     localStorage.removeItem('token')
-//     localStorage.removeItem('user')
-//     router.push('/login')
-//   } catch (err) {
-//     console.error('Logout failed:', err)
-//   }
-// }
+    // Clean up and redirect
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    router.push('/login')
+  } catch (err) {
+    console.error('Logout failed:', err)
+  }
+}
 </script>
 
 <style>
 /* Add any component specific styles here */
 .navbar {
-  background-color: #1e1b29;
+  background-color: #2f2f2f;
 }
 .navbar .nav-link {
   color: azure !important;
@@ -137,7 +118,7 @@ const router = useRouter()
 }
 
 .subheader {
-  background-color: #ff4b91;
+  background-color: #ff4989;
   color: #f5f5f5;
   font-size: 14px;
   display: flex;

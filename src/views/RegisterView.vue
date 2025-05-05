@@ -7,7 +7,15 @@
         <input v-model="password" type="password" placeholder="Password" required />
         <input v-model="name" placeholder="Name" required />
         <input v-model="email" type="email" placeholder="Email" required />
-        <input type="file" @change="handleFile" accept="image/*" />
+        <!-- Profile Picture Label and File Input -->
+        <label for="profile-pic" class="profile-pic-label">Choose a Profile Picture (jpg, jpeg, png)</label>
+        <input
+          type="file"
+          id="profile-pic"
+          @change="handleFile"
+          accept=".jpg, .jpeg, .png"
+          class="file-input"
+        />
         <button type="submit">Register</button>
       </form>
     </div>
@@ -17,6 +25,8 @@
 
 <script>
 import api from '../api';
+import defaultAvatar from '@/assets/defaultAvatar.jpg'; // ✅ import the image from assets
+
 
 api.defaults.withCredentials = true;
 
@@ -55,7 +65,7 @@ export default {
         if (this.photoFile) {
           formData.append('photo', this.photoFile);
         } else {
-          const resp = await fetch('/defaultAvatar.jpg');
+          const resp = await fetch(defaultAvatar);
           const blob = await resp.blob();
           const file = new File([blob], 'defaultAvatar.jpg', { type: blob.type });
           formData.append('photo', file);
@@ -128,5 +138,42 @@ button {
 
 button:hover {
   background-color: #e14b76;
+}
+
+/* Hide the file input */
+.file-input {
+  display: none;
+}
+
+/* Style the label to look like a button */
+.profile-pic-label {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: 600;
+  margin-bottom: 2em;
+}
+
+.profile-pic-label:hover {
+  background-color: #ff5c8a;
+  color: white;
+}
+
+.profile-pic-label:active {
+  background-color: #e14b76;
+  color: white;
+}
+
+.profile-pic-label:focus {
+  outline: none;
+  border-color: #ff5c8a;
 }
 </style>

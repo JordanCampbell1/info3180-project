@@ -29,7 +29,7 @@
         <div class="card h-100 shadow-sm">
           <div class="img-container">
             <img
-              :src="profile.photo ? `${API_BASE_URL}/uploads/${profile.photo}` : `${API_BASE_URL}/uploads/defaultAvatar.png`"
+              :src="profile.photo ? `${API_BASE_URL}/uploads/${profile.photo}` : defaultAvatar"
               class="card-img-top profile-img"
               alt="Profile photo"
             />
@@ -43,7 +43,7 @@
             <!-- View More Button -->
             <router-link 
               :to="`/profiles/${profile.id}`" 
-              class="btn btn-outline-primary mt-auto"
+              class="btn btn-outline-pink mt-auto"
             >
               View More Details
             </router-link>
@@ -75,6 +75,8 @@
 import { ref, computed, onMounted } from 'vue'
 import api from '../api'
 import { API_BASE_URL } from '../config'
+import defaultAvatar from '@/assets/defaultAvatar.jpg';
+
 
 // State
 const allProfiles = ref([])
@@ -298,5 +300,17 @@ onMounted(fetchProfiles)
   height: 100%;
   object-fit: cover;
 }
+
+.btn-outline-pink {
+  color: #ff4b91;
+  border-color: #ff4b91;
+  background-color: transparent;
+}
+
+.btn-outline-pink:hover {
+  background-color: #ff4b91;
+  color: white;
+}
+
 
 </style>

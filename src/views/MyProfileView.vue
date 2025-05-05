@@ -8,7 +8,7 @@
         <div class="row g-0">
           <div class="col-md-4 d-flex justify-content-center align-items-center p-3">
             <img
-              :src="user.photo ? `${API_BASE_URL}/uploads/${user.photo}` : `${API_BASE_URL}/uploads/defaultAvatar.png`"
+              :src="user.photo ? `${API_BASE_URL}/uploads/${user.photo}` : defaultAvatar"
               class="img-fluid rounded-circle user-img"
               alt="User Photo"
             />
@@ -61,6 +61,8 @@
 </template>
 
 <script setup>
+import defaultAvatar from '@/assets/defaultAvatar.jpg'; // ✅ import the image from assets
+
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '../api'

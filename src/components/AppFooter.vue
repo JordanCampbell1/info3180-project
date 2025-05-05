@@ -1,9 +1,7 @@
 <template>
-      <footer class="mt-5">
-          <div class="container">
-              <p>Copyright &copy {{ year }} Flask Inc.</p>
-          </div>
-      </footer>
+          <footer class="text-center py-4 mt-5 bg-light">
+      <p class="mb-0">&copy; 2025 JamDate. All rights reserved.</p>
+    </footer>
 </template>
 
 <script setup>

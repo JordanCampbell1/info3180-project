@@ -10,9 +10,10 @@
 
       <!-- Registration Link -->
       <p class="register-link">
-        Don't have an account?
-        <router-link to="/register">Register Here</router-link>
+        Don't have an account? 
+        <router-link to="/register" class="register-link-btn">Register Here</router-link>
       </p>
+
     </div>
   </div>
 </template>
@@ -137,6 +138,27 @@ button:hover {
   margin-top: 1rem;
   text-align: center;
   font-size: 0.9rem;
+  color: #333;
 }
+
+.register-link-btn {
+  color: #9c27b0; /* Primary button color */
+  font-weight: bold;
+  text-decoration: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.register-link-btn:hover {
+  background-color: #9c27b0;
+  color: white;
+  text-decoration: none;
+}
+
+.register-link-btn:active {
+  background-color: #9c27b0;
+}
+
 
 </style>
