@@ -88,10 +88,18 @@ def jwt_required(f):  ##jwt required decorator to attach to the relevant routes
 ####
 ####
 
+
 # this is the route for the index page
 # and the static files (assets) folder
 # this is where the vue app will be served from
 # the vue app will be served from the index.html file in the static folder
+@app.route("/<path:path>")
+def serve_vue(path):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    else:
+        # Fallback: serve index.html for Vue routes
+        return send_from_directory(app.static_folder, "index.html")
 
 
 @app.route("/")
@@ -701,13 +709,13 @@ def get_user_profiles(current_user_id, user_id):
 
 
 # catch call for vue router to redirect all calls to the index.html file
-@app.route("/<path:path>")
-def serve_vue(path=""):
-    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
-        return send_from_directory(app.static_folder, path)
-    else:
-        # Fallback: serve index.html for Vue routes
-        return send_from_directory(app.static_folder, "index.html")
+# @app.route("/<path:path>")
+# def serve_vue(path):
+#     if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+#         return send_from_directory(app.static_folder, path)
+#     else:
+#         # Fallback: serve index.html for Vue routes
+#         return send_from_directory(app.static_folder, "index.html")
 
 
 #####
