@@ -1,22 +1,29 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import AppHeader from "@/components/AppHeader.vue";
-import AppFooter from "@/components/AppFooter.vue";
+import { computed } from 'vue'
+import { useRoute, RouterView } from 'vue-router'
+import AppHeader from "@/components/AppHeader.vue"
+import AppFooter from "@/components/AppFooter.vue"
+
+const route = useRoute()
+
+// Header and footer hidden on login or register
+const hideHeader = computed(() =>
+  route.path === '/login' || route.path === '/register'
+)
 </script>
 
 <template>
-  <AppHeader />
-<!--- separate subheader from header and then check if not login and not register to display subheader---->
+  <div :style="{ paddingTop: hideHeader ? '0' : '0' }">
+    <AppHeader v-if="!hideHeader" />
 
-  <main>
-    <RouterView />
-  </main>
-  
-  <AppFooter />
+    <main>
+      <RouterView />
+    </main>
+
+    <AppFooter v-if="!hideHeader" />
+  </div>
 </template>
 
 <style>
-body {
-  padding-top: 75px;
-}
+/* Removed body padding, now handled conditionally in template */
 </style>
