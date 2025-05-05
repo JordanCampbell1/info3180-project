@@ -44,9 +44,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="text-center py-4 mt-5 bg-light">
-      <p class="mb-0">&copy; 2025 JamDate. All rights reserved.</p>
-    </footer>
+
   </div>
 </template>
 
@@ -57,11 +55,37 @@
 
 <style scoped>
 .hero {
-  background: #003366;
+  background-color: #1e1b29;
   padding: 80px 20px;
   text-align: center;
+  color: #ffffff;
 }
+
+.hero h1 {
+  color: #ff4b91;
+}
+
+.hero p {
+  color: #f5f5f5;
+}
+
 .section-title {
   margin-bottom: 20px;
+  color: #ff4b91;
+  font-weight: 700;
 }
+
+section.container {
+  background-color: #fff5f9;
+  color: #2f2f2f;
+  padding: 60px 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+section.container:nth-of-type(even) {
+  background-color: #ffffff;
+}
+
 </style>

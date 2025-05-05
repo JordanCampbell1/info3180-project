@@ -21,13 +21,13 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'Home',
       component: HomeView,
       //beforeEnter: requireAuth
     },
     {
       path: '/register',
-      name: 'register',
+      name: 'Register',
       component: RegisterView
     },
     {
@@ -37,17 +37,17 @@ const router = createRouter({
     },
     {
       path: '/about',
-      name: 'about',
+      name: 'About',
       component: AboutView
     },
     {
       path: '/users/:userid',
-      name: 'my-profile',
+      name: 'My Profile',
       component: () => import('../views/MyProfileView.vue') // Add this line
     },
     {
       path: '/profiles/:id',
-      name: 'ProfileDetails',
+      name: 'Profile Details',
       component: () => import('@/views/ProfileDetails.vue') // or wherever the component is
     },
     {
@@ -57,7 +57,7 @@ const router = createRouter({
     },
     {
       path: '/profiles/new',
-      name: 'CreateProfile',
+      name: 'Create Profile',
       component: () => import('@/views/CreateProfile.vue') // or wherever the component is
     },
     {
@@ -67,7 +67,7 @@ const router = createRouter({
     },
     {
       path: '/:pathMatch(.*)*',
-      name: 'NotFound',
+      name: 'Not Found',
       component: () => import('@/views/NotFound.vue')
     },
     

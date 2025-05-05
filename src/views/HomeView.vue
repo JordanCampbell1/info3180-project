@@ -43,7 +43,7 @@
             <!-- View More Button -->
             <router-link 
               :to="`/profiles/${profile.id}`" 
-              class="btn btn-outline-primary mt-auto"
+              class="btn btn-outline-pink mt-auto"
             >
               View More Details
             </router-link>
@@ -298,5 +298,17 @@ onMounted(fetchProfiles)
   height: 100%;
   object-fit: cover;
 }
+
+.btn-outline-pink {
+  color: #ff4b91;
+  border-color: #ff4b91;
+  background-color: transparent;
+}
+
+.btn-outline-pink:hover {
+  background-color: #ff4b91;
+  color: white;
+}
+
 
 </style>
