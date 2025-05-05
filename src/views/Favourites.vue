@@ -19,7 +19,7 @@
                 style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;"
               />
               <div class="card-body">
-                <h5 class="card-title">{{ user.username }}</h5>
+                <h5 class="card-title">{{ user.name }}</h5>
                 <p class="text-muted small">Favoured {{ user.favourite_count }} time(s)</p>
               </div>
             </div>
@@ -44,7 +44,7 @@
                 style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;"
               />
               <div class="card-body">
-                <h5 class="card-title">{{ user.username }}</h5>
+                <h5 class="card-title">{{ user.name }}</h5>
                 <p class="text-muted small">{{ user.email }}</p>
               </div>
             </div>

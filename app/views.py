@@ -290,6 +290,7 @@ def get_all_profiles(user_id):
                 "family_oriented": profile.family_oriented,
                 # From User
                 "username": user.username,
+                "name": user.name,
                 "photo": user.photo,
                 "date_joined": user.date_joined.isoformat(),
                 "profile_created": profile.created_at.isoformat(),
@@ -409,6 +410,7 @@ def get_profile(user_id, profile_id):
         "religious": profile.religious,
         "family_oriented": profile.family_oriented,
         "username": user.username,
+        "name": user.name,
         "photo": user.photo,
         "date_joined": user.date_joined.isoformat(),
         "profile_created": profile.created_at.isoformat(),
@@ -629,6 +631,7 @@ def user_favourites(user_id, user_id2):
                 {
                     "id": user.id,
                     "username": user.username,
+                    "name": user.name,
                     "email": user.email,
                     "photo": user.photo,  # Include photo field
                 }
@@ -658,6 +661,7 @@ def top_favourited_users(user_id, N):
             udata = {
                 "id": user.id,
                 "username": user.username,
+                "name": user.name,
                 "email": user.email,
                 "photo": user.photo,  # Include the photo field
                 "favourite_count": count,

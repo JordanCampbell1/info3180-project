@@ -14,7 +14,7 @@
           </div>
           <div class="col-md-7">
             <div class="card-body">
-              <h4 class="card-title mb-2">{{ profile.username }}</h4>
+              <h4 class="card-title mb-2">{{ profile.name }}</h4>
               <p class="card-text"><strong>Bio:</strong> {{ profile.biography || 'N/A' }}</p>
               <p class="card-text mb-1"><strong>Parish:</strong> {{ profile.parish }}</p>
               <p class="card-text mb-1"><strong>Sex:</strong> {{ profile.sex }}</p>

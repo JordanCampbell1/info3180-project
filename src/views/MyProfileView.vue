@@ -64,11 +64,11 @@
 import defaultAvatar from '@/assets/defaultAvatar.jpg'; // ✅ import the image from assets
 
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import api from '../api'
 import { API_BASE_URL } from '../config'
 
-const route = useRoute()
+const router = useRouter()
 const userStr = localStorage.getItem('user')
 const userParse = JSON.parse(userStr)
 const userId = userParse.id 
@@ -103,8 +103,14 @@ const fetchUserAndProfiles = async () => {
 
     user.value = userRes.data
     profiles.value = profileRes.data
-  } catch (err) {
-    error.value = err.response?.data?.message || 'Could not load profile data.'
+    console.log('Profiles:', profiles.value)
+  }  catch (err) {
+    const msg = err.response?.data?.message
+    if (msg === 'No profiles found for this user.') {
+      router.push('/profiles/new')  // 🔁 Redirect to profile creation page
+    } else {
+      error.value = msg || 'Could not load profile data.'
+    }
   } finally {
     loading.value = false
   }

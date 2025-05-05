@@ -35,7 +35,7 @@
             />
           </div>
           <div class="card-body d-flex flex-column">
-            <h5 class="card-title">{{ profile.username }}</h5>
+            <h5 class="card-title">{{ profile.name }}</h5>
             <p class="card-text mb-1"><strong>Sex:</strong> {{ profile.sex }}</p>
             <p class="card-text mb-1"><strong>Race:</strong> {{ profile.race }}</p>
             <p class="card-text mb-1"><strong>Parish:</strong> {{ profile.parish }}</p>
