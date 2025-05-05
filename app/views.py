@@ -704,6 +704,7 @@ def index():
     return app.send_static_file("index.html")
 
 
+# probabaly better to use a not '/api' route checker for the vue rendering
 # --- OPTIONAL: 404 HANDLER ---
 @app.errorhandler(404)
 def not_found(e):
