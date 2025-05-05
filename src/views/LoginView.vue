@@ -37,11 +37,11 @@ export default {
   async mounted() {
     try {
 
-      console.log("VITE_API_URL =", API_BASE_URL);
+      //console.log("VITE_API_URL =", API_BASE_URL);
 
-      console.log("mounted hook running...");
+      //console.log("mounted hook running...");
       const { data } = await api.get('/api/csrf-token');
-      console.log("CSRF token fetched:", data.csrf_token);
+      //console.log("CSRF token fetched:", data.csrf_token);
       this.csrfToken = data.csrf_token;
     } catch (e) {
       console.error('Could not fetch CSRF token:', e);
@@ -51,14 +51,14 @@ export default {
   methods: {
     async login() {
       try {
-        console.log("Login button clicked");
+        //console.log("Login button clicked");
 
         // Format request correctly for Flask-WTF
         const formData = new URLSearchParams();
         formData.append("username", this.username);
         formData.append("password", this.password);
 
-        console.log("Attempting login with URL encoded format:", formData.toString());
+        //console.log("Attempting login with URL encoded format:", formData.toString());
 
         const response = await api.post("/api/auth/login", formData, {
           headers: {
@@ -68,12 +68,12 @@ export default {
         });
 
         const token = response.data.token;
-        console.log("Token received:", token);
+        //console.log("Token received:", token);
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
         api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-        console.log("Login successful, redirecting...");
+        //console.log("Login successful, redirecting...");
         this.$router.push("/");
       }
        catch (error) {
